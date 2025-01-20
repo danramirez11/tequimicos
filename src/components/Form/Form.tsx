@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { FormContext } from "../../context/formContext";
+import ContainerForm from "./FormComp/Cont";
 
 const Form = () => {
     const formContext = useContext(FormContext);
@@ -14,7 +15,7 @@ const Form = () => {
 
             { receipt.products.map((p, i) => {
                 if (p.type === 'container') {
-                    return <p key={i}>container</p>
+                    return <ContainerForm key={i} container={p}/>
                 } else if (p.type === 'lid') {
                     return <p key={i}>lid</p>
                 } else {
