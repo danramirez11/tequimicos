@@ -4,7 +4,7 @@ import ContainerForm from "./FormComp/Cont";
 
 const Form = () => {
     const formContext = useContext(FormContext);
-    const { receipt, handleMiscChange, handleAddChemical, handleAddLid, handleAddContainer, handleIsDelivery, handleFinish } = formContext!;
+    const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct } = formContext!;
 
     const personals = ['Valentina', 'Sebastian', 'Zulay']
     const paymentMethods = ['Efectivo','Transferencia']
@@ -26,9 +26,9 @@ const Form = () => {
             <h3>Total: {receipt.total}</h3>
 
             <p>añadir</p>
-            <button type="button" onClick={() => handleAddContainer()}>Envase</button>
-            <button type="button" onClick={() => handleAddLid()}>Tapa</button>
-            <button type="button" onClick={() => handleAddChemical()}>Químico</button>
+            <button type="button" onClick={() => handleAddProduct('container')}>Envase</button>
+            <button type="button" onClick={() => handleAddProduct('lid')}>Tapa</button>
+            <button type="button" onClick={() => handleAddProduct('chemical')}>Químico</button>
 
             <p>Personal</p>
             { personals.map((p, i) => 
@@ -54,7 +54,9 @@ const Form = () => {
 
             <button type="submit" onClick={() => handleFinish()}>Finalizar</button>
 
+            <p>{JSON.stringify(receipt)}</p>
             </form>
+            
     );
 }
 

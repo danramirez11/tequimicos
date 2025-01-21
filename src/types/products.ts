@@ -11,6 +11,7 @@ export type Receipt = {
 }
 
 export type ReceiptContainer = {
+    priceBy: 'unit' | 'dozen' | 'hundred' | 'pack' | 'none';
     productId: string;
     id: string;
     type: 'container';
@@ -21,6 +22,7 @@ export type ReceiptContainer = {
 }
 
 export type ReceiptLid = {
+    priceBy: 'unit' | 'dozen' | 'hundred' | 'pack';
     productId: string;
     type: 'lid';
     id: string;

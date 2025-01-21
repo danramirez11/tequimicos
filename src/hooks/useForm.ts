@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import { Receipt, ReceiptChemical, ReceiptContainer, ReceiptLid } from "../types/products";
 
 const useForm = () => {
@@ -14,133 +15,85 @@ const useForm = () => {
         isFinished: false
     }
 
+    const emptyContainer: ReceiptContainer = {
+        priceBy: 'unit',
+        productId: '',
+        id: '',
+        type: 'container',
+        name: 'none',
+        price: 0,
+        quantity: 0,
+        lids: [
+            {
+                priceBy: 'unit',
+                productId: '',
+                type: 'lid',
+                id: '',
+                name: 'none',
+                price: 0,
+                quantity: 0,
+                colors: [ { name: 'rojo', quantity: 0 } ]
+            }
+        ]
+    }
+
+    const emptyLid: ReceiptLid = {
+        priceBy: 'unit',
+        productId: '',
+        type: 'lid',
+        id: '',
+        name: 'none',
+        price: 0,
+        quantity: 0,
+        colors: []
+    }
+
+    const emptyChemical: ReceiptChemical = {
+        productId: '',
+        type: 'chemical',
+        id: '',
+        name: '',
+        price: 0,
+        quantity: 0,
+        unit: ''
+    }
+
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
+    const [chosenProducts, setChosenProducts] = useState<any>([])
+
+    const calculateTotal = () => {
+        console.log('hey')
+        const pack = Math.floor(Math.random() * (120 - 65 + 1)) + 65;
+
+        receipt.products.forEach((p) => {
+            if (p.type === 'container') {
+                if( p.quantity > pack ){
+                }
+            }
+        })
+
+    };
+
+    useEffect(() => {
+    calculateTotal();
+    }, [receipt.products]);
 
     console.log(receipt)
 
-
-    const handleProductChange = (id:string, key: string, value: string) => {
-        setReceipt((p: Receipt) => ({
-            ...p, 
-            products: p.products.map((product) => {
-                if (product.id === id) {
-                    return {...product, [key]: value}
-                } else {
-                    return product
-                }
-            })
-        }))
-    }
-
-    const handleContainerLidChange = (containerId: string, lidId: string, key: string, value: string) => {
-        setReceipt((p: Receipt) => ({
-            ...p,
-            products: p.products.map((product) => {
-                if (product.id === containerId && product.type === 'container') {
-                    return {
-                        ...product,
-                        lids: product.lids.map((lid) => {
-                            if (lid.id === lidId) {
-                                return {...lid, [key]: value}
-                            } else {
-                                return lid
-                            }
-                        })
-                    }
-                } else {
-                    return product
-                }
-            })
-        }))
-    }
-
-    const handleConLidColorChange = (containerId: string, lidId: string, color: string, key: string, value: string) => {
-        setReceipt((p: Receipt) => ({
-            ...p,
-            products: p.products.map((product) => {
-                if (product.id === containerId && product.type === 'container') {
-                    return {
-                        ...product,
-                        lids: product.lids.map((lid) => {
-                            if (lid.id === lidId) {
-                                return {
-                                    ...lid,
-                                    colors: lid.colors.map((c) => {
-                                        if (c.name === color) {
-                                            return {...c, [key]: value}
-                                        } else {
-                                            return c
-                                        }
-                                    })
-                                }
-                            } else {
-                                return lid
-                            }
-                        })
-                    }
-                } else {
-                    return product
-                }
-            })
-        }))
-    }
+    //BASIC FORM HANDLERS
 
     const handleMiscChange = (key: string, value: string) => {
         setReceipt((p: Receipt) => ({...p, [key]: value}))
     }
 
-    const handleAddContainer = () => {
-        const newContainer: ReceiptContainer = {
-            productId: '',
-            id: crypto.randomUUID(),
-            type: 'container',
-            name: '',
-            price: 0,
-            quantity: 0,
-            lids: [
-                {
-                    productId: '',
-                    type: 'lid',
-                    id: crypto.randomUUID(),
-                    name: '',
-                    price: 0,
-                    quantity: 0,
-                    colors: [
-                        {
-                            name: 'rojo',
-                            quantity: 0
-                        }
-                    ]
-                }
-            ]
+    const handleAddProduct = (product: string) => {
+        if (product === 'container') {
+            setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyContainer, id: crypto.randomUUID()}]}))
+        } else if (product === 'lid') {
+            setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyLid, id: crypto.randomUUID()}]}))
+        } else {
+            setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyChemical, id: crypto.randomUUID()}]}))
         }
-        setReceipt((p: Receipt) => ({...p, products: [...p.products, newContainer]}))
-    }
-
-    const handleAddLid = () => {
-        const newLid: ReceiptLid = {
-            productId: '',
-            type: 'lid',
-            id: crypto.randomUUID(),
-            name: '',
-            price: 0,
-            quantity: 0,
-            colors: []
-        }
-        setReceipt((p: Receipt) => ({...p, products: [...p.products, newLid]}))
-    }
-
-    const handleAddChemical = () => {
-        const newChemical: ReceiptChemical = {
-            productId: '',
-            type: 'chemical',
-            id: crypto.randomUUID(),
-            name: '',
-            price: 0,
-            quantity: 0,
-            unit: ''
-        }
-        setReceipt((p: Receipt) => ({...p, products: [...p.products, newChemical]}))
     }
 
     const handleIsDelivery = () => {
@@ -151,56 +104,201 @@ const useForm = () => {
         setReceipt((p: Receipt) => ({...p, isFinished: true, date: new Date().toISOString(), hour: new Date().toLocaleTimeString()}))
     }
 
-    const addLidToContainer = (containerId: string) => {
-        setReceipt((p: Receipt) => ({
-            ...p,
-            products: p.products.map((product) => {
-                if (product.id === containerId && product.type === 'container') {
-                    return {
-                        ...product,
-                        lids: [...product.lids, {
-                            productId: '',
-                            type: 'lid',
-                            id: crypto.randomUUID(),
-                            name: '',
-                            price: 0,
-                            quantity: 0,
-                            colors: [ { name: 'rojo', quantity: 0 } ]
-                        }]
-                    }
-                } else {
-                    return product
-                }
-            })
-        }))
-    }
 
-    const addColorToLid = (containerId: string, lidId: string) => {
-        setReceipt((p: Receipt) => ({
-            ...p,
-            products: p.products.map((product) => {
-                if (product.id === containerId && product.type === 'container') {
-                    return {
-                        ...product,
-                        lids: product.lids.map((lid) => {
-                            if (lid.id === lidId) {
-                                return {
-                                    ...lid,
-                                    colors: [...lid.colors, { name: 'rojo', quantity: 0 }]
+    const containerFun = {
+        changeContainer: (containerId: string, container: any) => {
+            const chosenContainer = JSON.parse(container)
+            setChosenProducts((p: any) => ([...p, chosenContainer]))
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {...product, name: chosenContainer.name, productId: chosenContainer.id}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        changeContainerQuantity: (containerId: string, quantity: number) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {...product, quantity}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        changeLid: (containerId: string, lidId: string, lid: any) => {
+            const chosenLid = JSON.parse(lid)
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {...lid, name: chosenLid.name, productId: chosenLid.id}
+                                } else {
+                                    return lid
                                 }
-                            } else {
-                                return lid
-                            }
-                        })
+                            })
+                        }
+                    } else {
+                        return product
                     }
-                } else {
-                    return product
-                }
-            })
-        }))
+                })
+            }))
+        },
+
+        changeLidQuantity: (containerId: string, lidId: string, quantity: number) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {...lid, quantity}
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        changeLidColor: (containerId: string, lidId: string, color: string, key: string, value: string | number) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {
+                                        ...lid,
+                                        colors: lid.colors.map((c) => {
+                                            if (c.name === color) {
+                                                return {...c, [key]: value}
+                                            } else {
+                                                return c
+                                            }
+                                        })
+                                    }
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        addLid: (containerId: string) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: [...product.lids, {...emptyLid, id: crypto.randomUUID()}]
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        addLidColor: (containerId: string, lidId: string) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {
+                                        ...lid,
+                                        colors: [...lid.colors, { name: 'rojo', quantity: 0 }]
+                                    }
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        deleteLid: (containerId: string, lidId: string) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.filter((lid) => lid.id !== lidId)
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        deleteLidColor: (containerId: string, lidId: string, color: string) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {
+                                        ...lid,
+                                        colors: lid.colors.filter((c) => c.name !== color)
+                                    }
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        }
     }
 
-    return { receipt, handleProductChange, handleMiscChange, handleAddContainer, handleAddLid, handleAddChemical, handleIsDelivery, handleFinish, handleContainerLidChange, handleConLidColorChange, addLidToContainer, addColorToLid }
+
+    //LID HANDLERS
+
+    //CHEMICAL HANDLERS
+
+    return { receipt, containerFun, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct,  }
 }
 
 export default useForm;
