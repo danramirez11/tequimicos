@@ -26,15 +26,15 @@ const Form = () => {
             <h3>Total: {receipt.total}</h3>
 
             <p>añadir</p>
-            <button type="button" onClick={() => handleAddProduct('container')}>Envase</button>
-            <button type="button" onClick={() => handleAddProduct('lid')}>Tapa</button>
-            <button type="button" onClick={() => handleAddProduct('chemical')}>Químico</button>
+            <button className="bGreen" type="button" onClick={() => handleAddProduct('container')}>Envase</button>
+            <button className="bGreen" type="button" onClick={() => handleAddProduct('lid')}>Tapa</button>
+            <button className="bGreen" type="button" onClick={() => handleAddProduct('chemical')}>Químico</button>
 
             <p>Personal</p>
             { personals.map((p, i) => 
             <button type="button" key={i}
                 onClick={() => handleMiscChange('personal', p)} 
-                className={p === receipt.personal ? 'button-selected' : ''}>
+                className={p === receipt.personal ? 'bLightBlue' : 'bOutlined'}>
                     {p}
             </button> )
             }
@@ -43,7 +43,7 @@ const Form = () => {
             { paymentMethods.map((p, i) => 
             <button type="button" key={i}
                 onClick={() => handleMiscChange('payment', p)}
-                className={p === receipt.payment ? 'button-selected' : ''}
+                className={p === receipt.payment ? 'bLightBlue' : 'bOutlined'}
                 >
                     {p}
             </button>

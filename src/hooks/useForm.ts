@@ -61,21 +61,50 @@ const useForm = () => {
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
     const [chosenProducts, setChosenProducts] = useState<any>([])
 
+    const pack = Math.floor(Math.random() * (120 - 65 + 1)) + 65;
+      
+
+
     const calculateTotal = () => {
-        console.log('hey')
-        const pack = Math.floor(Math.random() * (120 - 65 + 1)) + 65;
-
-        receipt.products.forEach((p) => {
+        console.log('hey');
+    
+        const updatedReceipt = { ...receipt };
+    
+        updatedReceipt.products = receipt.products.map((p) => {
+            const productData = chosenProducts.find((cp: any) => cp.id === p.productId);
+    
+            if (!productData) return p;
+    
+            let updatedLids: ReceiptLid[] = [];
+    
             if (p.type === 'container') {
-                if( p.quantity > pack ){
-                }
+                updatedLids = p.lids
+                    .map((l) => {
+                        const lidData = productData.lids.find((pl: any) => pl.id === l.productId);
+                        if (!lidData) return undefined;
+    
+                        if (lidData && lidData.prices[l.priceBy]) {
+                            return { ...l, price: lidData.prices[l.priceBy] * l.quantity };
+                        }
+    
+                        return l;
+                    })
+                    // Use your type guard to filter undefined values
+                    .filter((l): l is ReceiptLid => l !== undefined);
+    
+                return { ...p, lids: updatedLids };
             }
-        })
-
+    
+            return p;
+        });
+    
+        setReceipt(updatedReceipt); // Update the state
     };
+    
 
     useEffect(() => {
-    calculateTotal();
+    //calculateTotal();
+    console.log('render')
     }, [receipt.products]);
 
     console.log(receipt)
@@ -122,6 +151,31 @@ const useForm = () => {
         },
 
         changeContainerQuantity: (containerId: string, quantity: number) => {
+            if ( quantity > pack ){
+                setReceipt((p: Receipt) => {
+                    return ({...p, products: p.products.map((product) => {
+                        if (product.id === containerId && product.type === 'container') {
+                            return {...product, priceBy: 'pack'}
+                        } else {
+                            return product
+                        }
+                    })})
+                })
+            } else {
+                setReceipt((p: Receipt) => {
+                    return ({...p, products: p.products.map((product) => {
+                        if (product.id === containerId && product.type === 'container') {
+                            return {...product, priceBy: 'none', 
+                                lids: product.lids.map((lid) => {
+                                    return {...lid, priceBy: 'unit'}
+                                })
+                            }
+                        } else {
+                            return product
+                        }
+                    })}) 
+                })
+            }
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -166,7 +220,7 @@ const useForm = () => {
                             ...product,
                             lids: product.lids.map((lid) => {
                                 if (lid.id === lidId) {
-                                    return {...lid, quantity}
+                                    return {...lid, quantity, priceBy: quantity >= 12 ? 'dozen' : 'unit'}
                                 } else {
                                     return lid
                                 }
@@ -296,9 +350,61 @@ const useForm = () => {
 
     //LID HANDLERS
 
+    const lidFun = {
+        changeLid: (lidId: string, lid: any) => {
+            const chosenLid = JSON.parse(lid)
+            setChosenProducts((p: any) => ([...p, chosenLid]))
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {...product, name: chosenLid.name, productId: chosenLid.id}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        changeLidQuantity: (lidId: string, quantity: number) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {...product, quantity}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        changeLidColor: (lidId: string, color: string, key: string, value: string | number) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {
+                            ...product,
+                            colors: product.colors.map((c) => {
+                                if (c.name === color) {
+                                    return {...c, [key]: value}
+                                } else {
+                                    return c
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        }
+    }
+
     //CHEMICAL HANDLERS
 
-    return { receipt, containerFun, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct,  }
+    return { receipt, containerFun, lidFun, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct,  }
 }
 
 export default useForm;

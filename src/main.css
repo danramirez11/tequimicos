@@ -1,3 +1,52 @@
 body{
     font-family: 'Arial'
 }
+
+button{
+    background-color: #b6bdb7;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+.bLightBlue{
+    background-color: #3e8bcb;
+}
+
+.bLightBlue:hover{
+    background-color: #3e8bcb;
+}
+
+.bLightBlue:disabled{
+    background-color: #333638;
+}
+
+.bBlueSimple{
+    color: #3e8bcb;
+    background-color: transparent;
+}
+
+.bBlueSimple:disabled{
+    color: #333638;
+}
+
+.bGreen{
+    background-color: #4CAF50;
+}
+
+.bGreen:hover{
+    background-color: #45a049;
+}
+
+.bOutlined{
+    background-color: transparent;
+    border: 1px solid #333638;
+    color: #333638;
+}
+
+.bRedSimple{
+    color: #983939;
+    background-color: transparent;
+}
