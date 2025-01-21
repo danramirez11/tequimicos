@@ -1,28 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { collection, getDocs } from "firebase/firestore";
-import { Combination } from "../../types/firebase";
+import { Lid } from "../../types/firebase";
 import { db } from "../../services/firebaseConfig";
 
-export interface comboState {
-    data: Combination[];
+export interface lidState {
+    data: Lid[];
     loading: boolean;
     error: unknown | null;
 }
 
-const initialState: comboState = {
+const initialState: lidState = {
     data: [],
     loading: false,
     error: null,
 }
 
-export const fetchComboData =createAsyncThunk(
-    'firebase/fecthComboData',
+export const fetchLidData =createAsyncThunk(
+    'firebase/fetcLidData',
     async (_, {rejectWithValue}) => {
         try {
-            const querySnapshot = await getDocs(collection(db, 'combinations'))
-            const data: Combination[] = []
+            const querySnapshot = await getDocs(collection(db, 'lids'))
+            const data: Lid[] = []
             querySnapshot.forEach((doc) => {
-                data.push({id: doc.id, ...(doc.data() as Omit<Combination, 'id'>) })
+                data.push({id: doc.id, ...(doc.data() as Omit<Lid, 'id'>) })
             })
             return data;
         } catch (error) {
@@ -31,25 +31,25 @@ export const fetchComboData =createAsyncThunk(
     }
 )
 
-const combinationSlice = createSlice({
-    name: "combination",
+const lidSlice = createSlice({
+    name: "lid",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
       builder
-        .addCase(fetchComboData.pending, (state) => {
+        .addCase(fetchLidData.pending, (state) => {
           state.loading = true;
           state.error = null;
         })
-        .addCase(fetchComboData.fulfilled, (state, action) => {
+        .addCase(fetchLidData.fulfilled, (state, action) => {
           state.loading = false;
           state.data = action.payload;
         })
-        .addCase(fetchComboData.rejected, (state, action) => {
+        .addCase(fetchLidData.rejected, (state, action) => {
           state.loading = false;
           state.error = action.payload;
         });
     },
   });
   
-  export default combinationSlice.reducer;
+  export default lidSlice.reducer;

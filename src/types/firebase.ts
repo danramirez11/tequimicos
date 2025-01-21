@@ -23,6 +23,7 @@ type CombinationLid = {
 }
 
 export type Container = {
+    id: string;
     name: string;
     pack: number;
     prices: {
@@ -36,6 +37,7 @@ export type Container = {
 }
 
 export type Lid = {
+    id: string;
     name: string;
     pack: number;
     prices: {
