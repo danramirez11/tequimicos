@@ -1,7 +1,9 @@
 import { useContext } from "react";
-import { combinations } from "../../../utils/fakeData";
 import { FormContext } from "../../../context/formContext";
 import { ReceiptContainer } from "../../../types/products";
+import { useSelector } from "react-redux";
+import { StoreType } from "../../../store/store";
+import useSelectPicker from "../../../hooks/useSelectPicker";
 
 type ContainerProps = {
     container: ReceiptContainer;
@@ -10,17 +12,23 @@ type ContainerProps = {
 const colors = ['Blanco', 'Rojo', 'Azul', 'Verde', 'Amarillo', 'Negro']
 
 const ContainerForm = ({container}: ContainerProps) => {
-        const formContext = useContext(FormContext);
-        const { containerFun } = formContext!;
+    useSelectPicker();
+    const formContext = useContext(FormContext);
+    const { containerFun } = formContext!;
+    const { combinations, loading } = useSelector((state: StoreType) => state.combinations)
+    const { lids } = useSelector((state: StoreType) => state.lids) 
+
 
     return (
         <div>
-            <select onChange={(e) => containerFun.changeContainer(container.id, e.target.value)} name="container">
+            { loading && <p>Cargando...</p>}
+            <select onChange={(e) => containerFun.changeContainer(container.id, e.target.value)} name="container" className="selectpicker" data-live-search="true">
                 <option value="none">Seleccionar envase</option>
                 { combinations.map((c, i) => 
                     <option key={i} value={JSON.stringify(c)}>{c.name}</option>
                 )}
             </select>
+
             <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)}/>
 
             { container.name !== 'none' && container.lids.map((l, i) => {
@@ -36,7 +44,9 @@ const ContainerForm = ({container}: ContainerProps) => {
                         <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)}/>
                         <button type="button" onClick={() => containerFun.deleteLid(container.id, l.id)}>X</button>
 
-                        {   l.name !== 'none' &&
+                        
+
+                        {   l.name !== 'none' && 
                             l.colors.map((color, i) => {
                                 return (
                                     <div key={i}>
@@ -53,7 +63,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                             })
                         }
                         {
-                            l.colors.length < 3 && <button type="button" onClick={() => containerFun.addLidColor(container.id, l.id)}>Añadir Color</button>
+                            <button type="button" onClick={() => containerFun.addLidColor(container.id, l.id)}>Añadir Color</button>
                         }
                     </div>
                     </>

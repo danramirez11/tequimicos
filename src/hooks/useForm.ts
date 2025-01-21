@@ -32,7 +32,7 @@ const useForm = () => {
                 name: 'none',
                 price: 0,
                 quantity: 0,
-                colors: [ { name: 'rojo', quantity: 0 } ]
+                colors: []
             }
         ]
     }
@@ -291,7 +291,7 @@ const useForm = () => {
                                 if (lid.id === lidId) {
                                     return {
                                         ...lid,
-                                        colors: [...lid.colors, { name: 'rojo', quantity: 0 }]
+                                        colors: [...lid.colors, { name: crypto.randomUUID(), quantity: 0 }]
                                     }
                                 } else {
                                     return lid

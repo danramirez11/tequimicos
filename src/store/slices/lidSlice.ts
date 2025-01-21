@@ -4,13 +4,13 @@ import { Lid } from "../../types/firebase";
 import { db } from "../../services/firebaseConfig";
 
 export interface lidState {
-    data: Lid[];
+    lids: Lid[];
     loading: boolean;
     error: unknown | null;
 }
 
 const initialState: lidState = {
-    data: [],
+    lids: [],
     loading: false,
     error: null,
 }
@@ -43,7 +43,7 @@ const lidSlice = createSlice({
         })
         .addCase(fetchLidData.fulfilled, (state, action) => {
           state.loading = false;
-          state.data = action.payload;
+          state.lids = action.payload;
         })
         .addCase(fetchLidData.rejected, (state, action) => {
           state.loading = false;

@@ -4,13 +4,13 @@ import { Combination } from "../../types/firebase";
 import { db } from "../../services/firebaseConfig";
 
 export interface comboState {
-    data: Combination[];
+    combinations: Combination[];
     loading: boolean;
     error: unknown | null;
 }
 
 const initialState: comboState = {
-    data: [],
+    combinations: [],
     loading: false,
     error: null,
 }
@@ -43,7 +43,7 @@ const combinationSlice = createSlice({
         })
         .addCase(fetchComboData.fulfilled, (state, action) => {
           state.loading = false;
-          state.data = action.payload;
+          state.combinations = action.payload;
         })
         .addCase(fetchComboData.rejected, (state, action) => {
           state.loading = false;
