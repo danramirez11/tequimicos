@@ -18,6 +18,8 @@ body{
     --blue: #2970E9;
     --green: #29C86F;
     --red: #ED5A5A;
+    --gray: #1e1e1e80;
+    
 }
 
 .page{
@@ -26,4 +28,13 @@ body{
     gap: 20px;
     padding: 20px;
     margin-left: 20vw;
+}
+
+.indentation{
+    margin-left: 20px;
+}
+
+.flex{
+    display: flex;
+    gap: 5px;
 }

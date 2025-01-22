@@ -1,0 +1,30 @@
+select{
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+    background-color: #f9f9f9;
+    color: var(--black);
+    outline: none;
+    transition: all 0.3s;
+}
+
+select.simple{
+    background-color: transparent;
+    width: 50%;
+}
+
+input{
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    color: var(--black);
+    outline: none;
+    border-bottom: var(--gray) 2px solid;
+    transition: all 0.3s;
+}
+
+button.dropdown-toggle{
+    width: 100%;
+}
+

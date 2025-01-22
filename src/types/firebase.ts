@@ -46,8 +46,7 @@ export type Lid = {
         hundred: number;
         pack: number;
     };
-    quantity: number;
-    colors: string[];
+    colors: unknown;
     type: 'lid';
 }
 

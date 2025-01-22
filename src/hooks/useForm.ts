@@ -182,6 +182,7 @@ const useForm = () => {
 
         changeLid: (containerId: string, lidId: string, lid: any) => {
             const chosenLid = JSON.parse(lid)
+            console.log(chosenLid)
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {

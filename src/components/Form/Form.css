@@ -5,9 +5,27 @@
     border-radius: 15px;
     padding: 20px;
     gap: 10px;
+    width: 70vw;
 }
 
 .selling-form-btn{
     display: flex;
     gap: 4px;;
+}
+
+.selling-form-product{
+    padding-block: 20px;
+    border-bottom: 2px solid var(--black);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    input{
+        width: 15%;
+    }
+}
+
+button.search-box{
+    width: 100%;
 }

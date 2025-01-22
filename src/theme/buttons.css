@@ -53,3 +53,19 @@ button.outline{
     border: 1px solid #333638;
     color: #333638;
 }
+
+button.outline:hover{
+    background-color: #333638;
+    color: white;
+}
+
+/*RED SIMPLE*/
+
+button.red-simple{
+    color: var(--red);
+    background-color: transparent;
+}
+
+button.red-simple:hover{
+    color: var(--black);
+}

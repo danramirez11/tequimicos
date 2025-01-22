@@ -28,9 +28,9 @@ const Form = () => {
 
             <div className="selling-form-btn">
             <p>añadir</p>
-            <button className="bGreen" type="button" onClick={() => handleAddProduct('container')}>Envase</button>
-            <button className="bGreen" type="button" onClick={() => handleAddProduct('lid')}>Tapa</button>
-            <button className="bGreen" type="button" onClick={() => handleAddProduct('chemical')}>Químico</button>
+            <button className="green" type="button" onClick={() => handleAddProduct('container')}>Envase</button>
+            <button className="green" type="button" onClick={() => handleAddProduct('lid')}>Tapa</button>
+            <button className="green" type="button" onClick={() => handleAddProduct('chemical')}>Químico</button>
             </div>
 
             <p>Personal</p>
@@ -38,7 +38,7 @@ const Form = () => {
             { personals.map((p, i) => 
             <button type="button" key={i}
                 onClick={() => handleMiscChange('personal', p)} 
-                className={p === receipt.personal ? 'bLightBlue' : 'bOutlined'}>
+                className={p === receipt.personal ? 'blue' : 'outline'}>
                     {p}
             </button> )
             }
@@ -49,17 +49,17 @@ const Form = () => {
             { paymentMethods.map((p, i) => 
             <button type="button" key={i}
                 onClick={() => handleMiscChange('payment', p)}
-                className={p === receipt.payment ? 'bLightBlue' : 'bOutlined'}
+                className={p === receipt.payment ? 'blue' : 'outline'}
                 >
                     {p}
             </button>
             )}
             </div>
 
-            <span>
+            <div className="flex">
             <input type="checkbox" name="isDelivery" onClick={() => handleIsDelivery()}/>
             <label htmlFor="isDelivery">Domicilio</label>
-            </span>
+            </div>
 
             <button type="submit" onClick={() => handleFinish()}>Finalizar</button>
 
