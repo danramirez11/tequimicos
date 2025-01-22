@@ -16,18 +16,7 @@ const ContainerForm = ({container}: ContainerProps) => {
     const formContext = useContext(FormContext);
     const { containerFun } = formContext!;
     const { combinations, loading } = useSelector((state: StoreType) => state.combinations)
-    const { lids } = useSelector((state: StoreType) => state.lids) 
-
-    console.log(container.lids[0].name, container.lids[0].productId)
-
-    lids.forEach((l) => {
-        if (l.name === container.lids[0].name) {
-            console.log(`lid names: ${l.name + container.lids[0].name}`)
-            console.log(`lid id: ${l.id + " receipt produc id:  " + container.lids[0].productId +  "  receipt lid id:" + container.lids[0].id}`)
-        } else {
-            console.log('dont found it ')
-        }
-    })
+    const { lids } = useSelector((state: StoreType) => state.lids)
 
 
     return (
@@ -35,7 +24,7 @@ const ContainerForm = ({container}: ContainerProps) => {
             { loading && <p>Cargando...</p>}
 
             <div className="flex">
-            <select onChange={(e) => containerFun.changeContainer(container.id, e.target.value)} name="container" className="selectpicker search-box" data-live-search="true">
+            <select onChange={(e) => containerFun.changeContainer(container.id, e.target.value)} name="container" className="selectpicker search-box w-100" data-live-search="true">
                 <option value="none">Seleccionar envase</option>
                 { combinations.map((c, i) => 
                     <option key={i} value={JSON.stringify(c)}>{c.name}</option>
@@ -54,10 +43,10 @@ const ContainerForm = ({container}: ContainerProps) => {
                     <>
                     <div key={i}>
                         <div className="flex">
-                        <select onChange={(e) => containerFun.changeLid(container.id, l.id, e.target.value)} name="lid">
+                        <select onChange={(e) => containerFun.changeLid(container.id, l.id, e.target.value)} name="lid" value={JSON.stringify({ name: l.name, id: l.productId})}>
                             <option value="none">Sin tapa</option>
                             { combinations.find(c => c.name === container.name)!.lids.map((lid, i) => 
-                                <option key={i} value={JSON.stringify(lid)}>{lid.name}</option>
+                                <option key={i} value={JSON.stringify({ name: lid.name, id: lid.id})}>{lid.name}</option>
                             )}
                         </select>
                         <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)}/>
@@ -71,9 +60,11 @@ const ContainerForm = ({container}: ContainerProps) => {
                                     <div key={i} className="flex">
                                         <select onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'name', e.target.value)} name="color" className="simple">
                                             <option value="none">Seleccionar color</option>
-                                            { colors.map((c, i) => 
-                                                <option key={i} value={c}>{c}</option>
-                                            )}
+                                            { 
+                                                lids.find(lid => lid.id === l.productId) && Object.keys(lids.find(lid => lid.id === l.productId)?.colors || {}).map((c, i) => (
+                                                    <option key={i} value={c}>{c}</option>
+                                                ))
+                                            }
                                         </select>
                                         <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'quantity', e.target.value)}/>
                                         <button type="button" className="red-simple" onClick={() => containerFun.deleteLidColor(container.id, l.id, color.name)}>X</button>

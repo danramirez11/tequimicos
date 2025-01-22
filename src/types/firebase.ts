@@ -11,7 +11,7 @@ export type Combination = {
     lids: CombinationLid[];
 }
 
-type CombinationLid = {
+export type CombinationLid = {
     id: string;
     name: string;
     prices: {

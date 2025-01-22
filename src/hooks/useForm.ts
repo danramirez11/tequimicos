@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Receipt, ReceiptChemical, ReceiptContainer, ReceiptLid } from "../types/products";
+import { CombinationLid } from "../types/firebase";
 
 const useForm = () => {
     const emptyReceipt: Receipt = {
@@ -23,18 +24,7 @@ const useForm = () => {
         name: 'none',
         price: 0,
         quantity: 0,
-        lids: [
-            {
-                priceBy: 'unit',
-                productId: '',
-                type: 'lid',
-                id: '',
-                name: 'none',
-                price: 0,
-                quantity: 0,
-                colors: []
-            }
-        ]
+        lids: []
     }
 
     const emptyLid: ReceiptLid = {
@@ -109,7 +99,7 @@ const useForm = () => {
 
     const handleAddProduct = (product: string) => {
         if (product === 'container') {
-            setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyContainer, id: crypto.randomUUID()}]}))
+            setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyContainer, id: crypto.randomUUID(), lids: [{...emptyLid, id: crypto.randomUUID()}]}]}))
         } else if (product === 'lid') {
             setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyLid, id: crypto.randomUUID()}]}))
         } else {
@@ -124,6 +114,39 @@ const useForm = () => {
     const handleFinish = () => {
         setReceipt((p: Receipt) => ({...p, isFinished: true, date: new Date().toISOString(), hour: new Date().toLocaleTimeString()}))
     }
+
+    const checkAvailableLids = (containerId: string) => {
+        const container = receipt.products.find((p) => p.id === containerId && p.type === 'container') as ReceiptContainer;
+        const chosenContainer = chosenProducts.find((p: any) => p.id === container.productId);
+
+        if (container && chosenContainer) {
+            setReceipt((p: Receipt) => (
+                {
+                    ...p,
+                    products: p.products.map((product) => {
+                        if (product.id === containerId && product.type === 'container') {
+                            return {
+                                ...product,
+                                lids: product.lids.map((lid) => {
+                                    const chosenLid = chosenContainer.lids.find((l: CombinationLid) => l.id === lid.productId);
+                                    if (chosenLid) {
+                                        return lid
+                                    } else {
+                                        return {...lid, name: 'none'}
+                                    }
+                                })
+                            }
+                        } else {
+                            return product
+                        }
+                    })
+                }
+            ))
+
+    }}
+
+
+    //CONTAINER HANDLERS
 
 
     const containerFun = {
@@ -140,6 +163,8 @@ const useForm = () => {
                     }
                 })
             }))
+
+            checkAvailableLids(containerId);
         },
 
         changeContainerQuantity: (containerId: string, quantity: number) => {
@@ -182,7 +207,6 @@ const useForm = () => {
 
         changeLid: (containerId: string, lidId: string, lid: any) => {
             const chosenLid = JSON.parse(lid)
-            console.log(chosenLid)
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
