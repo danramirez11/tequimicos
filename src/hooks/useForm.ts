@@ -59,10 +59,7 @@ const useForm = () => {
     }
 
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
-    const [chosenProducts, setChosenProducts] = useState<any>([])
-
-    const pack = Math.floor(Math.random() * (120 - 65 + 1)) + 65;
-      
+    const [chosenProducts, setChosenProducts] = useState<any>([])      
 
 
     const calculateTotal = () => {
@@ -101,11 +98,6 @@ const useForm = () => {
         setReceipt(updatedReceipt); // Update the state
     };
     
-
-    useEffect(() => {
-    //calculateTotal();
-    console.log('render')
-    }, [receipt.products]);
 
     console.log(receipt)
 

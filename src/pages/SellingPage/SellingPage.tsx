@@ -4,8 +4,11 @@ import { FormProvider } from "../../context/formContext";
 const SellingPage = () => {
     return (
         <FormProvider>
+        <section className="page selling-page">
+        
         <h1>Facturación</h1>
         <Form/>
+        </section>
         </FormProvider>
     )
 }
