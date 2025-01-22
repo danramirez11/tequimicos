@@ -3,6 +3,7 @@ import App from './App'
 import './main.css'
 import { Provider } from 'react-redux'
 import { store } from './store/store'
+import './theme/exports.css'
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>

@@ -1,0 +1,13 @@
+.selling-form{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--blue);
+    border-radius: 15px;
+    padding: 20px;
+    gap: 10px;
+}
+
+.selling-form-btn{
+    display: flex;
+    gap: 4px;;
+}

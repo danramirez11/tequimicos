@@ -5,8 +5,7 @@ const SellingPage = () => {
     return (
         <FormProvider>
         <section className="page selling-page">
-        
-        <h1>Facturación</h1>
+        <h1>Pedidos</h1>
         <Form/>
         </section>
         </FormProvider>

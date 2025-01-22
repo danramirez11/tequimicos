@@ -1,0 +1,55 @@
+button{
+    background-color: #b6bdb7;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+/*LIGHT BLUE*/
+
+button.blue{
+    background-color: var(--blue);
+}
+
+button.blue:hover{
+    background-color: var(--blue);
+}
+
+button.blue:disabled{
+    background-color: #b6bdb7;
+}
+
+/*BLUE SIMPLE*/
+
+button.blue-simple{
+    color: var(--blue);
+    background-color: transparent;
+}
+
+button.blue-simple:hover{
+    color: var(--brand-blue);
+}
+
+/*GREEN*/
+
+button.green{
+    background-color: var(--green);
+}
+
+button.green:hover{
+    background-color: var(--brand-green);
+}
+
+button.green:disabled{
+    background-color: #b6bdb7;
+}
+
+/*OUTLINED*/
+
+button.outline{
+    background-color: transparent;
+    border: 1px solid #333638;
+    color: #333638;
+}
