@@ -9,8 +9,6 @@ type ContainerProps = {
     container: ReceiptContainer;
 }
 
-const colors = ['Blanco', 'Rojo', 'Azul', 'Verde', 'Amarillo', 'Negro']
-
 const ContainerForm = ({container}: ContainerProps) => {
     useSelectPicker();
     const formContext = useContext(FormContext);
@@ -33,6 +31,13 @@ const ContainerForm = ({container}: ContainerProps) => {
 
             <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)}/>
 
+            <select name="priceBy" className="small" onChange={(e) => containerFun.changePriceBy(container.id, e.target.value)} value={container.priceBy}>
+                <option value="unit">P. Unidad</option>
+                <option value="dozen">P. Docena</option>
+                <option value="hundred">P. Cien</option>
+                <option value="pack">P. Paca</option>
+            </select>
+
             <button className="red-simple" type="button">X</button>
             </div>
             
@@ -49,7 +54,13 @@ const ContainerForm = ({container}: ContainerProps) => {
                                 <option key={i} value={JSON.stringify({ name: lid.name, id: lid.id})}>{lid.name}</option>
                             )}
                         </select>
-                        <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)}/>
+                        <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)} value={l.quantity}/>
+                        <select name="priceBy" className="small" onChange={(e) => containerFun.changePriceByLid(container.id, l.id, e.target.value)} value={l.priceBy}>
+                            <option value="unit">P. Unidad</option>
+                            <option value="dozen">P. Docena</option>
+                            <option value="hundred">P. Cien</option>
+                            <option value="pack">P. Paca</option>
+                        </select>
                         <button type="button" className="red-simple" onClick={() => containerFun.deleteLid(container.id, l.id)}>X</button>
                         </div>
 
@@ -66,7 +77,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                                                 ))
                                             }
                                         </select>
-                                        <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'quantity', e.target.value)}/>
+                                        <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'quantity', e.target.value)} value={color.quantity}/>
                                         <button type="button" className="red-simple" onClick={() => containerFun.deleteLidColor(container.id, l.id, color.name)}>X</button>
                                     </div>
                                 )

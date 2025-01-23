@@ -10,8 +10,10 @@ export type Receipt = {
     isFinished: boolean;
 }
 
+export type PriceBy = 'unit' | 'dozen' | 'hundred' | 'pack';
+
 export type ReceiptContainer = {
-    priceBy: 'unit' | 'dozen' | 'hundred' | 'pack' | 'none';
+    priceBy: PriceBy;
     productId: string;
     id: string;
     type: 'container';

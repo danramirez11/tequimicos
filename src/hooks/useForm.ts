@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
-import { Receipt, ReceiptChemical, ReceiptContainer, ReceiptLid } from "../types/products";
+import { useState } from "react";
+import { PriceBy, Receipt, ReceiptChemical, ReceiptContainer, ReceiptLid } from "../types/products";
 import { CombinationLid } from "../types/firebase";
 
 const useForm = () => {
@@ -51,42 +51,6 @@ const useForm = () => {
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
     const [chosenProducts, setChosenProducts] = useState<any>([])      
 
-
-    const calculateTotal = () => {
-        console.log('hey');
-    
-        const updatedReceipt = { ...receipt };
-    
-        updatedReceipt.products = receipt.products.map((p) => {
-            const productData = chosenProducts.find((cp: any) => cp.id === p.productId);
-    
-            if (!productData) return p;
-    
-            let updatedLids: ReceiptLid[] = [];
-    
-            if (p.type === 'container') {
-                updatedLids = p.lids
-                    .map((l) => {
-                        const lidData = productData.lids.find((pl: any) => pl.id === l.productId);
-                        if (!lidData) return undefined;
-    
-                        if (lidData && lidData.prices[l.priceBy]) {
-                            return { ...l, price: lidData.prices[l.priceBy] * l.quantity };
-                        }
-    
-                        return l;
-                    })
-                    // Use your type guard to filter undefined values
-                    .filter((l): l is ReceiptLid => l !== undefined);
-    
-                return { ...p, lids: updatedLids };
-            }
-    
-            return p;
-        });
-    
-        setReceipt(updatedReceipt); // Update the state
-    };
     
 
     console.log(receipt)
@@ -168,31 +132,6 @@ const useForm = () => {
         },
 
         changeContainerQuantity: (containerId: string, quantity: number) => {
-            if ( quantity > pack ){
-                setReceipt((p: Receipt) => {
-                    return ({...p, products: p.products.map((product) => {
-                        if (product.id === containerId && product.type === 'container') {
-                            return {...product, priceBy: 'pack'}
-                        } else {
-                            return product
-                        }
-                    })})
-                })
-            } else {
-                setReceipt((p: Receipt) => {
-                    return ({...p, products: p.products.map((product) => {
-                        if (product.id === containerId && product.type === 'container') {
-                            return {...product, priceBy: 'none', 
-                                lids: product.lids.map((lid) => {
-                                    return {...lid, priceBy: 'unit'}
-                                })
-                            }
-                        } else {
-                            return product
-                        }
-                    })}) 
-                })
-            }
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -203,6 +142,28 @@ const useForm = () => {
                     }
                 })
             }))
+
+            const container = receipt.products.find((p) => p.id === containerId && p.type === 'container') as ReceiptContainer;
+
+            if ( container.lids.length === 1 ){
+                setReceipt((p: Receipt) => (
+                    {
+                        ...p,
+                        products: p.products.map((product) => {
+                            if (product.id === containerId && product.type === 'container') {
+                                return {
+                                    ...product,
+                                    lids: product.lids.map((lid) => {
+                                        return {...lid, quantity}
+                                    })
+                                }
+                            } else {
+                                return product
+                            }
+                        })
+                    }
+                ))
+            }
         },
 
         changeLid: (containerId: string, lidId: string, lid: any) => {
@@ -237,7 +198,7 @@ const useForm = () => {
                             ...product,
                             lids: product.lids.map((lid) => {
                                 if (lid.id === lidId) {
-                                    return {...lid, quantity, priceBy: quantity >= 12 ? 'dozen' : 'unit'}
+                                    return {...lid, quantity}
                                 } else {
                                     return lid
                                 }
@@ -248,6 +209,34 @@ const useForm = () => {
                     }
                 })
             }))
+
+            const container = receipt.products.find((p) => p.id === containerId && p.type === 'container') as ReceiptContainer;
+            const lid = container.lids.find((l) => l.id === lidId);
+
+            if ( lid?.colors.length === 1) {
+                setReceipt((p: Receipt) => (
+                    {
+                        ...p,
+                        products: p.products.map((product) => {
+                            if (product.id === containerId && product.type === 'container') {
+                                return {
+                                    ...product,
+                                    lids: product.lids.map((l) => {
+                                        if (l.id === lidId) {
+                                            return {...l, colors: l.colors.map((c) => ({...c, quantity}) )}
+                                        } else {
+                                            return l
+                                        }
+                                    })
+                                }
+                            } else {
+                                return product
+                            }
+                        })
+                    }
+                ))
+            }
+
         },
 
         changeLidColor: (containerId: string, lidId: string, color: string, key: string, value: string | number) => {
@@ -361,6 +350,39 @@ const useForm = () => {
                     }
                 })
             }))
+        },
+
+        changePriceBy: (containerId: string, priceBy: PriceBy) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {...product, priceBy: priceBy}
+                    } else {
+                        return product
+                    }
+                })})
+            })
+        },
+
+        changePriceByLid: (containerId: string, lidId: string, priceBy: PriceBy) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {...lid, priceBy: priceBy}
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })})
+            })
         }
     }
 

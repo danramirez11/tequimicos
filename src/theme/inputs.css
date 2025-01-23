@@ -14,6 +14,12 @@ select.simple{
     width: 50%;
 }
 
+select.small{
+    width: 20%;
+    background-color: var(--brand-blue);
+    color: white;
+}
+
 input{
     width: 100%;
     padding: 10px 15px;
