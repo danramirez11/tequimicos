@@ -131,7 +131,10 @@ const useForm = () => {
             checkAvailableLids(containerId);
         },
 
-        changeContainerQuantity: (containerId: string, quantity: number) => {
+        changeContainerQuantity: (containerId: string, quantityString: string) => {
+
+            const quantity = Number(quantityString)
+            
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -189,7 +192,10 @@ const useForm = () => {
             }))
         },
 
-        changeLidQuantity: (containerId: string, lidId: string, quantity: number) => {
+        changeLidQuantity: (containerId: string, lidId: string, quantityString: string) => {
+
+            const quantity = Number(quantityString.replace(/^0+(?!$)/, ''));
+
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -240,6 +246,7 @@ const useForm = () => {
         },
 
         changeLidColor: (containerId: string, lidId: string, color: string, key: string, value: string | number) => {
+
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -252,7 +259,7 @@ const useForm = () => {
                                         ...lid,
                                         colors: lid.colors.map((c) => {
                                             if (c.name === color) {
-                                                return {...c, [key]: value}
+                                                return {...c, [key]: key === 'quantity' ? Number(value) : value}
                                             } else {
                                                 return c
                                             }

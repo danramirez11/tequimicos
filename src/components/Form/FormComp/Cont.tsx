@@ -4,6 +4,7 @@ import { ReceiptContainer } from "../../../types/products";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../../store/store";
 import useSelectPicker from "../../../hooks/useSelectPicker";
+import { FaExclamationCircle } from "react-icons/fa";
 
 type ContainerProps = {
     container: ReceiptContainer;
@@ -77,11 +78,14 @@ const ContainerForm = ({container}: ContainerProps) => {
                                                 ))
                                             }
                                         </select>
-                                        <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'quantity', e.target.value)} value={color.quantity}/>
+                                        <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'quantity', e.target.value)} value={color.quantity} className="opacity"/>
                                         <button type="button" className="red-simple" onClick={() => containerFun.deleteLidColor(container.id, l.id, color.name)}>X</button>
                                     </div>
                                 )
                             })
+                        }
+                        { 
+                            l.quantity !== l.colors.reduce((acc, color) => acc + color.quantity, 0) && <p className="error"> <FaExclamationCircle/>Colores no coinciden</p>
                         }
                         {
                             <button type="button" className="blue-simple" onClick={() => containerFun.addLidColor(container.id, l.id)}>+ añadir color</button>
@@ -94,6 +98,8 @@ const ContainerForm = ({container}: ContainerProps) => {
 
             { container.name !== 'none' && <button type="button" className="blue" onClick={() => containerFun.addLid(container.id)}>añadir tapa</button>}
             </div>
+
+            { container.quantity !== container.lids.reduce((acc, lid) => acc + lid.quantity, 0) && <p className="error"> <FaExclamationCircle/>La cantidad de envases y tapas no coincide</p>}
 
 
         </section>

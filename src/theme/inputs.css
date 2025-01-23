@@ -30,6 +30,10 @@ input{
     transition: all 0.3s;
 }
 
+input.opacity{
+    color: var(--gray);
+}
+
 button.dropdown-toggle{
     width: 100%;
 }
