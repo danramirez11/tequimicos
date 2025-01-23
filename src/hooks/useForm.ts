@@ -154,7 +154,7 @@ const useForm = () => {
                                 return {
                                     ...product,
                                     lids: product.lids.map((lid) => {
-                                        return {...lid, quantity}
+                                        return {...lid, quantity, colors: lid.colors.length === 1 ? lid.colors.map((c) => ({...c, quantity}) ) : lid.colors}
                                     })
                                 }
                             } else {
