@@ -11,6 +11,7 @@ export type Receipt = {
 }
 
 export type PriceBy = 'unit' | 'dozen' | 'hundred' | 'pack';
+export type Spout = 'eco' | 'lab' 
 
 export type ReceiptContainer = {
     priceBy: PriceBy;
@@ -25,7 +26,7 @@ export type ReceiptContainer = {
 }
 
 export type ReceiptLid = {
-    priceBy: 'unit' | 'dozen' | 'hundred' | 'pack';
+    priceBy: PriceBy;
     productId: string;
     type: 'lid';
     id: string;
@@ -33,6 +34,7 @@ export type ReceiptLid = {
     price: number;
     quantity: number;
     colors: Color[];
+    spout?: Spout;
 }
 
 type Color = {

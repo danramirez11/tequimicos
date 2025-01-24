@@ -6,6 +6,10 @@
     padding: 20px;
     gap: 10px;
     width: 70vw;
+
+    p{
+        margin: 0;
+    }
 }
 
 .selling-form-btn{
@@ -28,4 +32,15 @@
 
 button.search-box{
     width: 100%;
+}
+
+.form-delivery{
+    display: flex;
+    gap: 4px;
+    width: max-content;
+    align-items: center;
+
+    label{
+        margin: 0;
+    }
 }

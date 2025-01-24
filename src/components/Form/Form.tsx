@@ -9,10 +9,10 @@ import { StoreType } from "../../store/store";
 const Form = () => {
     const formContext = useContext(FormContext);
     useSelectPicker();
-    const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct } = formContext!;
+    const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, finishErrors } = formContext!;
     const { clients } = useSelector((state: StoreType) => state.clients)
 
-    const personals = ['Valentina', 'Sebastian', 'Zulay']
+    const personals = ['Valentina', 'Sebastian', 'Zulay', 'Dufay']
     const paymentMethods = ['Efectivo','Transferencia']
 
 
@@ -35,7 +35,7 @@ const Form = () => {
                 }
             })}
 
-            <h3>Total: {receipt.total}</h3>
+            <h3 className="price">Total: {receipt.total}</h3>
 
             <div className="selling-form-btn">
             <p>añadir</p>
@@ -67,12 +67,14 @@ const Form = () => {
             )}
             </div>
 
-            <div className="flex">
+            <div className="form-delivery">
             <input type="checkbox" name="isDelivery" onClick={() => handleIsDelivery()}/>
             <label htmlFor="isDelivery">Domicilio</label>
             </div>
 
-            <button type="submit" onClick={() => handleFinish()}>Finalizar</button>
+            <button className="green" type="button" onClick={() => handleFinish()}>Finalizar</button>
+
+            { finishErrors.map((e, i) => <p className="error" key={i}>{e}</p>) }
 
             <p>{JSON.stringify(receipt.products[0])}</p>
 

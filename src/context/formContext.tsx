@@ -10,6 +10,7 @@ interface formContextProps {
     handleIsDelivery: () => void;
     handleFinish: () => void;
     handleAddProduct: (type: 'container' | 'lid' | 'chemical') => void;
+    finishErrors: string[];
 }
 
 export const FormContext = createContext<formContextProps | undefined>(undefined);
@@ -22,6 +23,7 @@ export const FormProvider: React.FC<{children: ReactNode}> = ({children}) => {
         handleIsDelivery,
         handleFinish,
         handleAddProduct,
+        finishErrors,
     } = useForm();
 
     return (
@@ -32,6 +34,7 @@ export const FormProvider: React.FC<{children: ReactNode}> = ({children}) => {
             handleIsDelivery,
             handleFinish,
             handleAddProduct,
+            finishErrors
         }}>
             {children}
         </FormContext.Provider>

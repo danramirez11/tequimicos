@@ -55,6 +55,12 @@ const ContainerForm = ({container}: ContainerProps) => {
                                 <option key={lid.id} value={JSON.stringify({ name: lid.name, id: lid.id})}>{lid.name}</option>
                             )}
                         </select>
+                        { l.name.toLowerCase().includes("pitorro") && 
+                            <select name="spout" onChange={(e) => containerFun.changeSpout(container.id, l.id, e.target.value)} value={l.spout || 'eco'}>
+                                <option value="eco">Económico</option>
+                                <option value="lab">Laboratorio</option>
+                            </select>
+                        }
                         <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)} value={l.quantity}/>
                         <select name="priceBy" className="small" onChange={(e) => containerFun.changePriceByLid(container.id, l.id, e.target.value)} value={l.priceBy}>
                             <option value="unit">P. Unidad</option>
@@ -84,11 +90,17 @@ const ContainerForm = ({container}: ContainerProps) => {
                                 )
                             })
                         }
+                        {
+                            <button type="button" className="blue-simple" onClick={() => containerFun.addLidColor(container.id, l.id)}>+ añadir color</button>
+                        }
                         { 
                             l.quantity !== l.colors.reduce((acc, color) => acc + color.quantity, 0) && <p className="error"> <FaExclamationCircle/>Colores no coinciden</p>
                         }
                         {
-                            <button type="button" className="blue-simple" onClick={() => containerFun.addLidColor(container.id, l.id)}>+ añadir color</button>
+                            l.name === 'none' && <p className="error"> <FaExclamationCircle/>Falta seleccionar tapa</p>
+                        }
+                        {
+                            ( l.colors.length === 0 || l.name === 'none') && <p className="error"> <FaExclamationCircle/>Falta seleccionar colores</p>
                         }
                         <h5 className="price">$ {l.price}</h5>
                         </div>
@@ -103,6 +115,8 @@ const ContainerForm = ({container}: ContainerProps) => {
             <h4 className="price">$ {container.price}</h4>
 
             { container.quantity !== container.lids.reduce((acc, lid) => acc + lid.quantity, 0) && <p className="error"> <FaExclamationCircle/>La cantidad de envases y tapas no coincide</p>}
+
+            { container.name === 'none' && <p className="error"> <FaExclamationCircle/>Falta seleccionar envase</p>}
 
 
         </section>

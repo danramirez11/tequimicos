@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { PriceBy, Receipt, ReceiptChemical, ReceiptContainer, ReceiptLid } from "../types/products";
+import { PriceBy, Receipt, ReceiptChemical, ReceiptContainer, ReceiptLid, Spout } from "../types/products";
 import { CombinationLid } from "../types/firebase";
+import { useEffect } from "react";
 
 const useForm = () => {
     const emptyReceipt: Receipt = {
@@ -50,9 +51,27 @@ const useForm = () => {
     }
 
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
-    const [chosenProducts, setChosenProducts] = useState<any>([])      
+    const [chosenProducts, setChosenProducts] = useState<any>([])
+    const [ finishErrors, setFinishErrors ] = useState<string[]>([])
 
     console.log(receipt)
+
+    useEffect(() => {
+        const handleReceiptChange = () => {
+            const total = receipt.products.reduce((acc, product) => acc + product.price, 0);
+            setReceipt((p: Receipt) => ({...p, total}))
+        };
+
+        console.log('hola')
+
+        handleReceiptChange();
+    }, [receipt.products]);
+
+    useEffect(() => {
+        if (finishErrors.length === 0) {
+            setReceipt((p: Receipt) => ({...p, isFinished: true, date: new Date().toLocaleDateString(), hour: new Date().toLocaleTimeString()}))
+        }
+    }, [finishErrors])
 
     //BASIC FORM HANDLERS
 
@@ -75,7 +94,57 @@ const useForm = () => {
     }
 
     const handleFinish = () => {
-        setReceipt((p: Receipt) => ({...p, isFinished: true, date: new Date().toISOString(), hour: new Date().toLocaleTimeString()}))
+        setReceipt((prev) => {
+            
+            const errors: string[] = [];
+
+
+            prev.products.forEach((product) => {
+                if (product.type === 'container') {
+                    if (product.name === 'none') {
+                        errors.push('Falta seleccionar envase');
+                    }
+
+                    if (product.quantity !== product.lids.reduce((acc, lid) => acc + lid.quantity, 0)) {
+                        errors.push(`La cantidad de envases y tapas no coincide en ${product.name}`);
+                    }
+
+                    product.lids.forEach((lid) => {
+                        if (lid.name === 'none') {
+                            errors.push(`Falta seleccionar tapa en ${product.name}`);
+                        }
+
+                        if (lid.colors.length === 0) {
+                            errors.push(`Falta seleccionar colores en ${product.name} - ${lid.name}`);
+                        }
+
+                        if (lid.quantity !== lid.colors.reduce((acc, color) => acc + color.quantity, 0)) {
+                            errors.push(`La cantidad de tapas y colores no coincide en ${product.name} - ${lid.name}`);
+                        }
+                    })
+                }
+            })
+
+            if (prev.client === '') {
+                errors.push('Falta seleccionar cliente');
+            }
+
+            if (prev.personal === '') {
+                errors.push('Falta seleccionar personal');
+            }
+
+            if (prev.payment === '') {
+                errors.push('Falta seleccionar método de pago');
+            }
+
+            if (errors.length > 0) {
+                setFinishErrors(errors);
+            } else {
+                setFinishErrors([]);
+            }
+
+            return prev;
+        })
     }
 
     const checkAvailableLids = (containerId: string) => {
@@ -500,6 +569,29 @@ const useForm = () => {
                     }
                 })})
             })
+
+            updatePricesContainer(containerId);
+        },
+
+        changeSpout: (containerId: string, lidId: string, spout: Spout) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {...lid, spout}
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })})
+            })
         }
     }
 
@@ -560,7 +652,7 @@ const useForm = () => {
 
     //CHEMICAL HANDLERS
 
-    return { receipt, containerFun, lidFun, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct,  }
+    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct,  }
 }
 
 export default useForm;
