@@ -44,15 +44,15 @@ const ContainerForm = ({container}: ContainerProps) => {
             
 
             <div className="indentation">
-            { container.name !== 'none' && container.lids.map((l, i) => {
+            { container.name !== 'none' && container.lids.map((l) => {
                 return (
                     <>
-                    <div key={i}>
+                    <div key={l.id}>
                         <div className="flex">
                         <select onChange={(e) => containerFun.changeLid(container.id, l.id, e.target.value)} name="lid" value={JSON.stringify({ name: l.name, id: l.productId})}>
                             <option value="none">Sin tapa</option>
-                            { combinations.find(c => c.name === container.name)!.lids.map((lid, i) => 
-                                <option key={i} value={JSON.stringify({ name: lid.name, id: lid.id})}>{lid.name}</option>
+                            { combinations.find(c => c.name === container.name)!.lids.map((lid) => 
+                                <option key={lid.id} value={JSON.stringify({ name: lid.name, id: lid.id})}>{lid.name}</option>
                             )}
                         </select>
                         <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)} value={l.quantity}/>
@@ -67,14 +67,14 @@ const ContainerForm = ({container}: ContainerProps) => {
 
                         <div className="indentation">
                         {   l.name !== 'none' && 
-                            l.colors.map((color, i) => {
+                            l.colors.map((color) => {
                                 return (
-                                    <div key={i} className="flex">
-                                        <select onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'name', e.target.value)} name="color" className="simple">
+                                    <div key={color.name} className="flex">
+                                        <select onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'name', e.target.value)} name="color" className="simple" value={color.name}>
                                             <option value="none">Seleccionar color</option>
                                             { 
-                                                lids.find(lid => lid.id === l.productId) && Object.keys(lids.find(lid => lid.id === l.productId)?.colors || {}).map((c, i) => (
-                                                    <option key={i} value={c}>{c}</option>
+                                                lids.find(lid => lid.id === l.productId) && Object.keys(lids.find(lid => lid.id === l.productId)?.colors || {}).map((c) => (
+                                                    <option key={c} value={c}>{c}</option>
                                                 ))
                                             }
                                         </select>

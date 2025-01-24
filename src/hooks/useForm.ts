@@ -120,27 +120,21 @@ const useForm = () => {
             if (quantity < 12) {
                 updatedReceipt.priceBy = 'unit';
                 lids.forEach((l) => l.priceBy = 'unit');
-                console.log('son unidades');
             } else if (quantity >= updatedReceipt.pack) {
-                console.log('son pacas');
                 updatedReceipt.priceBy = isPackGreater ? 'pack' : quantity >= 100 ? 'hundred' : 'pack';
                 lids.forEach((l) => l.priceBy = isPackGreater ? 'pack' : quantity >= 100 ? 'hundred' : 'pack');
             } else if ( quantity >= 100 ) {
                 updatedReceipt.priceBy = 'hundred';
                 lids.forEach((l) => l.priceBy = 'hundred');
-                console.log('son cientos');
             } else {
                 updatedReceipt.priceBy = 'dozen';
     
-                console.log('son docenas');
     
                 lids.forEach((lid) => {
                     if (lid.quantity >= 12) {
                         lid.priceBy = 'dozen';
-                        console.log(lid.name, 'son docenas');
                     } else {
                         lid.priceBy = 'unit';
-                        console.log(lid.name, 'son unidades');
                     }
                 });
             }
@@ -160,7 +154,62 @@ const useForm = () => {
                 })
             };
         });
+
+        console.log(chosenProducts)
+
+        updatePricesContainer(containerId);
     };
+
+    const updatePricesContainer = (containerId: string) => {
+
+        setChosenProducts((p: any) => {
+            const productId = receipt.products.find((p) => p.id === containerId && p.type === 'container')?.productId;
+
+            console.log(productId)
+
+            const chosenProduct = p.find((p: any) => p.id === productId);
+
+            console.log(chosenProduct)
+            console.log(p)
+
+            setReceipt((prev) => {
+                const updatedReceipt = {
+                    ...prev.products.find((p) => p.id === containerId && p.type === 'container') as ReceiptContainer
+                }
+    
+                console.log(chosenProducts)
+    
+                const { lids } = updatedReceipt;
+    
+                lids.forEach((l) => {
+                    const chosenLid = chosenProduct?.lids.find((cl: CombinationLid) => cl.id === l.productId);
+
+                    console.log(chosenLid)
+    
+                    if (chosenLid) {
+                        l.price = chosenLid.prices[l.priceBy] * l.quantity;
+                    }
+                })
+    
+                updatedReceipt.price = lids.reduce((total, lid) => total + lid.price, 0);
+
+                console.log(updatedReceipt.price)
+    
+                return {
+                    ...prev,
+                    products: prev.products.map((product) => {
+                        if (product.id === containerId && product.type === 'container') {
+                            return updatedReceipt;
+                        } else {
+                            return product;
+                        }
+                    })
+                }
+            })
+
+            return p;
+        })
+    }
     
 
 

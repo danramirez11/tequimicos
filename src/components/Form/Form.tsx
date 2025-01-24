@@ -25,13 +25,13 @@ const Form = () => {
                 )}
             </select>
 
-            { receipt.products.map((p, i) => {
+            { receipt.products.map((p) => {
                 if (p.type === 'container') {
-                    return <ContainerForm key={i} container={p}/>
+                    return <ContainerForm key={p.id} container={p}/>
                 } else if (p.type === 'lid') {
-                    return <p key={i}>lid</p>
+                    return <p key={p.id}>lid</p>
                 } else {
-                    return <p key={i}>chemical</p>
+                    return <p key={p.id}>chemical</p>
                 }
             })}
 
