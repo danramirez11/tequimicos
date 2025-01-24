@@ -90,7 +90,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                         {
                             <button type="button" className="blue-simple" onClick={() => containerFun.addLidColor(container.id, l.id)}>+ añadir color</button>
                         }
-                        <h5>$ {l.price}</h5>
+                        <h5 className="price">$ {l.price}</h5>
                         </div>
                     </div>
                     </>
@@ -100,7 +100,7 @@ const ContainerForm = ({container}: ContainerProps) => {
             { container.name !== 'none' && <button type="button" className="blue" onClick={() => containerFun.addLid(container.id)}>añadir tapa</button>}
             </div>
 
-            <h5>$ {container.price}</h5>
+            <h4 className="price">$ {container.price}</h4>
 
             { container.quantity !== container.lids.reduce((acc, lid) => acc + lid.quantity, 0) && <p className="error"> <FaExclamationCircle/>La cantidad de envases y tapas no coincide</p>}
 

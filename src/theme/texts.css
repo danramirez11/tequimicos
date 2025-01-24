@@ -4,3 +4,13 @@ p.error{
     align-items: center;
     gap: 4px;
 }
+
+.price{
+    font-weight: bold;
+    text-align: right;
+    padding: 12px;
+}
+
+h5.price{
+    color: var(--gray);
+}

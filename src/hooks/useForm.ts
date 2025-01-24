@@ -296,6 +296,8 @@ const useForm = () => {
                     }
                 })
             }))
+
+            updatePricesContainer(containerId);
         },
 
         changeLidQuantity: (containerId: string, lidId: string, quantityString: string) => {
