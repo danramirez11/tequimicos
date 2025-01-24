@@ -24,7 +24,8 @@ const useForm = () => {
         name: 'none',
         price: 0,
         quantity: 0,
-        lids: []
+        lids: [],
+        pack: 0
     }
 
     const emptyLid: ReceiptLid = {
@@ -50,8 +51,6 @@ const useForm = () => {
 
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
     const [chosenProducts, setChosenProducts] = useState<any>([])      
-
-    
 
     console.log(receipt)
 
@@ -109,19 +108,74 @@ const useForm = () => {
 
     }}
 
+    const updatePriceByContainer = (containerId: string) => {
+        setReceipt((prevReceipt) => {
+            const updatedReceipt = {
+                ...prevReceipt.products.find((p) => p.id === containerId && p.type === 'container') as ReceiptContainer
+            };
+    
+            const { quantity, lids } = updatedReceipt;
+            const isPackGreater = updatedReceipt.pack >= 100;
+    
+            if (quantity < 12) {
+                updatedReceipt.priceBy = 'unit';
+                lids.forEach((l) => l.priceBy = 'unit');
+                console.log('son unidades');
+            } else if (quantity >= updatedReceipt.pack) {
+                console.log('son pacas');
+                updatedReceipt.priceBy = isPackGreater ? 'pack' : quantity >= 100 ? 'hundred' : 'pack';
+                lids.forEach((l) => l.priceBy = isPackGreater ? 'pack' : quantity >= 100 ? 'hundred' : 'pack');
+            } else if ( quantity >= 100 ) {
+                updatedReceipt.priceBy = 'hundred';
+                lids.forEach((l) => l.priceBy = 'hundred');
+                console.log('son cientos');
+            } else {
+                updatedReceipt.priceBy = 'dozen';
+    
+                console.log('son docenas');
+    
+                lids.forEach((lid) => {
+                    if (lid.quantity >= 12) {
+                        lid.priceBy = 'dozen';
+                        console.log(lid.name, 'son docenas');
+                    } else {
+                        lid.priceBy = 'unit';
+                        console.log(lid.name, 'son unidades');
+                    }
+                });
+            }
+    
+            return {
+                ...prevReceipt,
+                products: prevReceipt.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            priceBy: updatedReceipt.priceBy,
+                            lids: product.lids.map((l) => ({ ...l, priceBy: l.priceBy }))
+                        };
+                    } else {
+                        return product;
+                    }
+                })
+            };
+        });
+    };
+    
+
 
     //CONTAINER HANDLERS
 
 
     const containerFun = {
-        changeContainer: (containerId: string, container: any) => {
+        changeContainer: (containerId: string, container: string) => {
             const chosenContainer = JSON.parse(container)
             setChosenProducts((p: any) => ([...p, chosenContainer]))
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
                     if (product.id === containerId && product.type === 'container') {
-                        return {...product, name: chosenContainer.name, productId: chosenContainer.id}
+                        return {...product, name: chosenContainer.name, productId: chosenContainer.id, pack: chosenContainer.pack}
                     } else {
                         return product
                     }
@@ -129,6 +183,7 @@ const useForm = () => {
             }))
 
             checkAvailableLids(containerId);
+            updatePriceByContainer(containerId);
         },
 
         changeContainerQuantity: (containerId: string, quantityString: string) => {
@@ -167,6 +222,8 @@ const useForm = () => {
                     }
                 ))
             }
+
+            updatePriceByContainer(containerId);
         },
 
         changeLid: (containerId: string, lidId: string, lid: any) => {
@@ -242,6 +299,8 @@ const useForm = () => {
                     }
                 ))
             }
+
+            updatePriceByContainer(containerId);
 
         },
 

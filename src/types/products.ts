@@ -21,6 +21,7 @@ export type ReceiptContainer = {
     price: number;
     quantity: number;
     lids: ReceiptLid[];
+    pack: number;
 }
 
 export type ReceiptLid = {

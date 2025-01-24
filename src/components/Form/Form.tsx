@@ -2,17 +2,28 @@ import { useContext } from "react";
 import { FormContext } from "../../context/formContext";
 import ContainerForm from "./FormComp/Cont";
 import './Form.css'
+import useSelectPicker from "../../hooks/useSelectPicker";
+import { useSelector } from "react-redux";
+import { StoreType } from "../../store/store";
 
 const Form = () => {
     const formContext = useContext(FormContext);
+    useSelectPicker();
     const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct } = formContext!;
+    const { clients } = useSelector((state: StoreType) => state.clients)
 
     const personals = ['Valentina', 'Sebastian', 'Zulay']
     const paymentMethods = ['Efectivo','Transferencia']
 
+
     return (
             <form className="selling-form">
-            <input type="text" placeholder="Cliente" name="client" value={receipt.client} onChange={(e) => handleMiscChange(e.target.name, e.target.value)}/>
+            <select name="client" id="" className="selectpicker w-50" data-live-search="true" onChange={(e) => handleMiscChange(e.target.name, e.target.value)}>
+                <option value="none">Seleccionar cliente</option>
+                { clients.map((c, i) => 
+                    <option key={i} value={c.name}>{c.name}</option>
+                )}
+            </select>
 
             { receipt.products.map((p, i) => {
                 if (p.type === 'container') {
@@ -62,6 +73,8 @@ const Form = () => {
             </div>
 
             <button type="submit" onClick={() => handleFinish()}>Finalizar</button>
+
+            <p>{JSON.stringify(receipt.products[0])}</p>
 
             </form>
             
