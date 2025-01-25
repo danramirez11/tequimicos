@@ -5,6 +5,7 @@ import './Form.css'
 import useSelectPicker from "../../hooks/useSelectPicker";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../store/store";
+import LidForm from "./FormComp/Lid";
 
 const Form = () => {
     const formContext = useContext(FormContext);
@@ -29,7 +30,7 @@ const Form = () => {
                 if (p.type === 'container') {
                     return <ContainerForm key={p.id} container={p}/>
                 } else if (p.type === 'lid') {
-                    return <p key={p.id}>lid</p>
+                    return <LidForm key={p.id} lid={p}/>
                 } else {
                     return <p key={p.id}>chemical</p>
                 }
