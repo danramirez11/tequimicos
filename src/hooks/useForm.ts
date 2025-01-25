@@ -238,12 +238,9 @@ const useForm = () => {
         setChosenProducts((p: any) => {
             const productId = receipt.products.find((p) => p.id === containerId && p.type === 'container')?.productId;
 
-            console.log(productId)
-
             const chosenProduct = p.find((p: any) => p.id === productId);
 
-            console.log(chosenProduct)
-            console.log(p)
+
 
             setReceipt((prev) => {
                 const updatedReceipt = {
@@ -282,6 +279,63 @@ const useForm = () => {
 
             return p;
         })
+    }
+
+    const updateLidPrice = (lidId: string, isPriceBySet?: boolean) => {
+
+        setChosenProducts((p: any) => {
+
+
+
+            setReceipt((prevReceipt) => {
+                const productId = prevReceipt.products.find((p) => p.id === lidId && p.type === 'lid')?.productId;
+
+                const chosenProduct = p.find((p: any) => p.id === productId);
+
+                const updatedReceipt = {
+                    ...prevReceipt.products.find((p) => p.id === lidId && p.type === 'lid') as ReceiptLid
+                };
+        
+                const { quantity } = updatedReceipt;
+    
+                updatedReceipt.pack = updatedReceipt.pack || 0;
+    
+                const isPackGreater = updatedReceipt.pack >= 100;
+    
+                if ( !isPriceBySet ) {
+                    if (quantity < 12) {
+                        updatedReceipt.priceBy = 'unit';
+                    } else if (quantity >= updatedReceipt?.pack) {
+                        updatedReceipt.priceBy = isPackGreater ? 'pack' : quantity >= 100 ? 'hundred' : 'pack';
+                    } else if ( quantity >= 100 ) {
+                        updatedReceipt.priceBy = 'hundred';
+                    } else {
+                        updatedReceipt.priceBy = 'dozen';
+                    }
+                }
+
+                updatedReceipt.price = chosenProduct.prices[updatedReceipt.priceBy] * quantity;
+    
+                return {
+                    ...prevReceipt,
+                    products: prevReceipt.products.map((product) => {
+                        if (product.id === lidId && product.type === 'lid') {
+                            return updatedReceipt;
+                        } else {
+                            return product;
+                        }
+                    })
+                };
+            })
+
+            return p;
+
+        })
+        
+    }
+
+    const handleDeleteProduct = (id: string) => {
+        setReceipt((p: Receipt) => ({...p, products: p.products.filter((product) => product.id !== id)}))
     }
     
 
@@ -603,32 +657,37 @@ const useForm = () => {
     //LID HANDLERS
 
     const lidFun = {
-        changeLid: (lidId: string, lid: any) => {
+        changeLid: (lidId: string, lid: string) => {
             const chosenLid = JSON.parse(lid)
+            console.log(chosenLid)
             setChosenProducts((p: any) => ([...p, chosenLid]))
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
                     if (product.id === lidId && product.type === 'lid') {
-                        return {...product, name: chosenLid.name, productId: chosenLid.id}
+                        return {...product, name: chosenLid.name, productId: chosenLid.id, pack: chosenLid.pack}
                     } else {
                         return product
                     }
                 })
             }))
+
+            updateLidPrice(lidId);
         },
 
-        changeLidQuantity: (lidId: string, quantity: number) => {
+        changeLidQuantity: (lidId: string, quantityString: string) => {
+            const quantity = Number(quantityString)
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
                     if (product.id === lidId && product.type === 'lid') {
-                        return {...product, quantity}
+                        return {...product, quantity, colors: product.colors.length === 1 ? product.colors.map((c) => ({...c, quantity})) : product.colors}
                     } else {
                         return product
                     }
                 })
             }))
+            updateLidPrice(lidId);
         },
 
         changeLidColor: (lidId: string, color: string, key: string, value: string | number) => {
@@ -640,7 +699,7 @@ const useForm = () => {
                             ...product,
                             colors: product.colors.map((c) => {
                                 if (c.name === color) {
-                                    return {...c, [key]: value}
+                                    return {...c, [key]: key === 'quantity' ? Number(value) : value}
                                 } else {
                                     return c
                                 }
@@ -651,12 +710,74 @@ const useForm = () => {
                     }
                 })
             }))
-        }
+        },
+
+        addLidColor: (lidId: string) => {
+            console.log('añadir color arriba')
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        console.log('añadir color')
+                        return {
+                            ...product,
+                            colors: [...product.colors, { name: crypto.randomUUID(), quantity: 0 }]
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        deleteColor: (lidId: string, color: string) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {
+                            ...product,
+                            colors: product.colors.filter((c) => c.name !== color)
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        changePriceBy: (lidId: string, priceBy: PriceBy) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {...product, priceBy: priceBy}
+                    } else {
+                        return product
+                    }
+                })})
+            })
+
+            updateLidPrice(lidId, true)
+        },
+
+        changeSpout: (lidId: string, spout: Spout) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {...product, spout}
+                    } else {
+                        return product
+                    }
+                })})
+            })
+        
+        updateLidPrice(lidId, true);
+        }    
     }
 
     //CHEMICAL HANDLERS
 
-    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct,  }
+    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, handleDeleteProduct }
 }
 
 export default useForm;

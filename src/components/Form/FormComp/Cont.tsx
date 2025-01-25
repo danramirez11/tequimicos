@@ -13,7 +13,7 @@ type ContainerProps = {
 const ContainerForm = ({container}: ContainerProps) => {
     useSelectPicker();
     const formContext = useContext(FormContext);
-    const { containerFun } = formContext!;
+    const { containerFun, handleDeleteProduct } = formContext!;
     const { combinations, loading } = useSelector((state: StoreType) => state.combinations)
     const { lids } = useSelector((state: StoreType) => state.lids)
 
@@ -34,7 +34,7 @@ const ContainerForm = ({container}: ContainerProps) => {
 
 
 
-            <button className="red-simple" type="button">X</button>
+            <button className="red-simple" type="button" onClick={() => handleDeleteProduct(container.id)}>X</button>
             </div>
             
 
@@ -58,10 +58,10 @@ const ContainerForm = ({container}: ContainerProps) => {
                         }
                         <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)} value={l.quantity}/>
                         <select name="priceBy" className="small" onChange={(e) => containerFun.changePriceByLid(container.id, l.id, e.target.value)} value={l.priceBy}>
-                            <option value="unit">P. Unidad</option>
-                            <option value="dozen">P. Docena</option>
-                            <option value="hundred">P. Cien</option>
-                            <option value="pack">P. Paca</option>
+                            <option value="unit">Unidad</option>
+                            <option value="dozen">Docena</option>
+                            <option value="hundred">Cien</option>
+                            <option value="pack">Paca</option>
                         </select>
                         <button type="button" className="red-simple" onClick={() => containerFun.deleteLid(container.id, l.id)}>X</button>
                         </div>
