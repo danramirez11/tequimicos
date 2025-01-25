@@ -1,0 +1,17 @@
+.print-receipt{
+    width: 8cm;
+    background-color: lightgray;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+
+    p{
+        margin: 0;
+        padding: 0;
+    }
+
+    div.indent{
+        padding-left: 20px;
+    }
+}
