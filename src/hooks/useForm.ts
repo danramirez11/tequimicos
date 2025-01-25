@@ -137,6 +137,10 @@ const useForm = () => {
                 errors.push('Falta seleccionar método de pago');
             }
 
+            if (prev.products.length === 0) {
+                errors.push('Falta seleccionar productos');
+            }
+
             if (errors.length > 0) {
                 setFinishErrors(errors);
             } else {

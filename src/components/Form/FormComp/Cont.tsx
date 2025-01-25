@@ -32,12 +32,7 @@ const ContainerForm = ({container}: ContainerProps) => {
 
             <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)}/>
 
-            <select name="priceBy" className="small" onChange={(e) => containerFun.changePriceBy(container.id, e.target.value)} value={container.priceBy}>
-                <option value="unit">P. Unidad</option>
-                <option value="dozen">P. Docena</option>
-                <option value="hundred">P. Cien</option>
-                <option value="pack">P. Paca</option>
-            </select>
+
 
             <button className="red-simple" type="button">X</button>
             </div>

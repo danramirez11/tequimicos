@@ -35,7 +35,7 @@ const Form = () => {
                 }
             })}
 
-            <h3 className="price">Total: {receipt.total}</h3>
+            <h3 className="price">Total: $ {receipt.total}</h3>
 
             <div className="selling-form-btn">
             <p>añadir</p>
