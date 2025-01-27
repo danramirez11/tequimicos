@@ -77,7 +77,7 @@ const Form = () => {
 
             { finishErrors.map((e, i) => <p className="error" key={i}>{e}</p>) }
 
-            <p>{JSON.stringify(receipt.products[0])}</p>
+            <p>{JSON.stringify(receipt)}</p>
 
             </form>
             

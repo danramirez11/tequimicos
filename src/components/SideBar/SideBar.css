@@ -32,3 +32,9 @@
 .active{
     background-color: var(--blue);
 }
+
+@media print {
+    .sidebar{
+        display: none;
+    }
+}

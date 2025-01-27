@@ -26,7 +26,7 @@ const PrintReceipt = () => {
                                     return (
                                         <div className="indent" key={l.id}>
                                             <p><b>{l.quantity}</b> {l.name}</p>
-                                            <p>{l.spout === 'eco' ? 'Económico' : 'Laboratorio'}</p>
+                                            <p>{l.spout ? l.spout === 'eco' ? 'Económico' : 'Laboratorio' : ''}</p>
                                             {
                                                 l.colors.map((c) => {
                                                     return (

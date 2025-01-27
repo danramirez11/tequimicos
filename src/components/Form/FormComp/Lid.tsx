@@ -29,7 +29,7 @@ const LidForm = ({lid}: LidFormProps) => {
                     )}
                 </select>
                 {
-                    lid.name.toLowerCase().includes("gotero") && 
+                    lid.name.toLowerCase().includes("pitorro") && 
                     <select name="spout" id="">
                         <option value="eco">Económico</option>
                         <option value="lab">Laboratorio</option>
@@ -62,7 +62,7 @@ const LidForm = ({lid}: LidFormProps) => {
                 )
             })}
             
-            <button type="button" className="blue-simple" onClick={() => lidFun.addLidColor(lid.id)}>+ añadir color perra</button>
+            <button type="button" className="blue-simple" onClick={() => lidFun.addLidColor(lid.id)}>+ añadir color</button>
             
             {
                 lid.quantity !== lid.colors.reduce((acc, c) => acc + c.quantity, 0) && <p className="error"><FaExclamationCircle/> La cantidad de colores no coincide con la cantidad de tapas</p>

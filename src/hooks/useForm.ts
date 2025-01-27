@@ -52,7 +52,7 @@ const useForm = () => {
 
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
     const [chosenProducts, setChosenProducts] = useState<any>([])
-    const [ finishErrors, setFinishErrors ] = useState<string[]>([])
+    const [ finishErrors, setFinishErrors ] = useState<string[]>([' '])
 
     console.log(receipt)
 
@@ -70,6 +70,8 @@ const useForm = () => {
     useEffect(() => {
         if (finishErrors.length === 0) {
             setReceipt((p: Receipt) => ({...p, isFinished: true, date: new Date().toLocaleDateString(), hour: new Date().toLocaleTimeString()}))
+            print();
+            setFinishErrors([' '])
         }
     }, [finishErrors])
 
@@ -337,6 +339,12 @@ const useForm = () => {
     const handleDeleteProduct = (id: string) => {
         setReceipt((p: Receipt) => ({...p, products: p.products.filter((product) => product.id !== id)}))
     }
+
+    const reset = () => {
+        setReceipt({...emptyReceipt})
+        setFinishErrors([' '])
+        setChosenProducts([])
+    }
     
 
 
@@ -412,7 +420,7 @@ const useForm = () => {
                             ...product,
                             lids: product.lids.map((lid) => {
                                 if (lid.id === lidId) {
-                                    return {...lid, name: chosenLid.name, productId: chosenLid.id}
+                                    return {...lid, name: chosenLid.name, productId: chosenLid.id, spout: chosenLid.name.toLowerCase().includes('pitorro') ? 'eco' : undefined}
                                 } else {
                                     return lid
                                 }
@@ -665,7 +673,7 @@ const useForm = () => {
                 ...p,
                 products: p.products.map((product) => {
                     if (product.id === lidId && product.type === 'lid') {
-                        return {...product, name: chosenLid.name, productId: chosenLid.id, pack: chosenLid.pack}
+                        return {...product, name: chosenLid.name, productId: chosenLid.id, pack: chosenLid.pack, spout: chosenLid.name.toLowerCase().includes('pitorro') ? 'eco' : undefined}
                     } else {
                         return product
                     }

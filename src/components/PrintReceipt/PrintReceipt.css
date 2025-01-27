@@ -1,10 +1,10 @@
 .print-receipt{
     width: 8cm;
-    background-color: lightgray;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 10px;
+    padding: 5px;
+    display: none;
 
     p{
         margin: 0;
@@ -13,5 +13,18 @@
 
     div.indent{
         padding-left: 20px;
+    }
+}
+
+@media print{
+    h1, h3, form, .selling-form {
+        display: none;
+    }
+
+    .print-receipt{
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 }
