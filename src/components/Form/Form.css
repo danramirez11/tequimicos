@@ -44,3 +44,7 @@ button.search-box{
         margin: 0;
     }
 }
+
+div.filter-option-inner-inner{
+    font-weight: bold;
+}
