@@ -10,21 +10,39 @@ import LidForm from "./FormComp/Lid";
 const Form = () => {
     const formContext = useContext(FormContext);
     useSelectPicker();
-    const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, finishErrors } = formContext!;
+    const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, finishErrors, clientFun, clientErrors } = formContext!;
     const { clients } = useSelector((state: StoreType) => state.clients)
 
     const personals = ['Valentina', 'Sebastian', 'Zulay', 'Dufay']
     const paymentMethods = ['Efectivo','Transferencia']
 
+    
+
 
     return (
             <form className="selling-form">
-            <select name="client" id="" className="selectpicker w-50" data-live-search="true" onChange={(e) => handleMiscChange(e.target.name, e.target.value)}>
-                <option value="none">Seleccionar cliente</option>
+            <div className="flex">
+            <select name="client" id="" className="selectpicker w-50" data-live-search="true" value={receipt.client} onChange={(e) => handleMiscChange(e.target.name, e.target.value)}>
+                <option value="none">Seleccionar cliente</option>   
+                <option value="add">Añadir cliente</option>
                 { clients.map((c, i) => 
                     <option key={i} value={c.name}>{c.name}</option>
                 )}
             </select>
+            <h5>Cliente: {receipt.client}</h5>
+            </div>
+
+            {
+                receipt.client === 'add' &&
+                <>
+                <div className="flex">
+                    <input type="text" name="name" placeholder="Nombre del cliente" required onChange={(e) => clientFun.addClientInfo(e.target.name, e.target.value)}/>
+                    <input type="text" name="id" placeholder="Cédula" onChange={(e) => clientFun.addClientInfo(e.target.name, e.target.value)}/>
+                    <button className="green" type="button" disabled={clientErrors === '' ? false : true} onClick={() => clientFun.addClient()}>Añadir</button>
+                </div>
+                <p className="error">{clientErrors}</p>
+                </>
+            }
 
             { receipt.products.map((p) => {
                 if (p.type === 'container') {
@@ -77,7 +95,7 @@ const Form = () => {
 
             { finishErrors.map((e, i) => <p className="error" key={i}>{e}</p>) }
 
-            <p>{JSON.stringify(receipt)}</p>
+            <p>{JSON.stringify(clients)}</p>
 
             </form>
             

@@ -13,6 +13,8 @@ interface formContextProps {
     finishErrors: string[];
     lidFun: any;
     handleDeleteProduct: (id: string) => void;
+    clientFun: any;
+    clientErrors: string;
 }
 
 export const FormContext = createContext<formContextProps | undefined>(undefined);
@@ -27,7 +29,9 @@ export const FormProvider: React.FC<{children: ReactNode}> = ({children}) => {
         handleAddProduct,
         finishErrors,
         lidFun,
-        handleDeleteProduct
+        handleDeleteProduct,
+        clientFun,
+        clientErrors
     } = useForm();
 
     return (
@@ -40,7 +44,9 @@ export const FormProvider: React.FC<{children: ReactNode}> = ({children}) => {
             handleAddProduct,
             finishErrors,
             lidFun,
-            handleDeleteProduct
+            handleDeleteProduct,
+            clientFun,
+            clientErrors
         }}>
             {children}
         </FormContext.Provider>

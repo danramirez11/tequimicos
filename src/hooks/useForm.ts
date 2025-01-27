@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { PriceBy, Receipt, ReceiptChemical, ReceiptContainer, ReceiptLid, Spout } from "../types/products";
-import { CombinationLid } from "../types/firebase";
+import { Client, CombinationLid } from "../types/firebase";
 import { useEffect } from "react";
+import { addClienttoFirestore } from "../services/firestore";
+import { useSelector } from "react-redux";
+import { StoreType } from "../store/store";
 
 const useForm = () => {
     const emptyReceipt: Receipt = {
@@ -53,6 +56,10 @@ const useForm = () => {
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
     const [chosenProducts, setChosenProducts] = useState<any>([])
     const [ finishErrors, setFinishErrors ] = useState<string[]>([' '])
+    const [ clientForm, setClientForm ] = useState<Client>({id: '', name: ''})
+    const [ clientErrors, setClientErrors ] = useState<string>('')
+
+    const { clients } = useSelector((state: StoreType) => state.clients)
 
     console.log(receipt)
 
@@ -344,6 +351,33 @@ const useForm = () => {
         setReceipt({...emptyReceipt})
         setFinishErrors([' '])
         setChosenProducts([])
+    }
+
+    const clientFun = {
+
+        addClientInfo: (key: string, value: string) => {
+            setClientForm((p: Client) => ({...p, [key]: value}))
+
+
+            if (key === 'name') {
+                console.log(value)
+                if (clients.find((c) => c.name === value.trim())) {
+                    setClientErrors('El cliente ya existe')
+                } else {
+                    setClientErrors('')
+                }
+            }
+        },
+
+        addClient: async () => {
+
+            const clientAdded = await addClienttoFirestore({name: clientForm.name, id: clientForm.id ? clientForm.id : crypto.randomUUID()})
+
+            if (clientAdded) {
+                setReceipt((p: Receipt) => ({...p, client: clientForm.name}))
+            }
+
+        }
     }
     
 
@@ -785,7 +819,7 @@ const useForm = () => {
 
     //CHEMICAL HANDLERS
 
-    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, handleDeleteProduct }
+    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, handleDeleteProduct, clientFun, clientErrors}
 }
 
 export default useForm;
