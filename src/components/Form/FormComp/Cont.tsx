@@ -42,7 +42,7 @@ const ContainerForm = ({container}: ContainerProps) => {
             { container.name !== 'none' && container.lids.map((l) => {
                 return (
                     <>
-                    <div key={l.id}>
+                    <div key={l.id} className="selling-lid-container">
                         <div className="flex">
                         <select onChange={(e) => containerFun.changeLid(container.id, l.id, e.target.value)} name="lid" value={JSON.stringify({ name: l.name, id: l.productId})}>
                             <option value="none">Sin tapa</option>
@@ -97,7 +97,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                         {
                             ( l.colors.length === 0 || l.name === 'none') && <p className="error"> <FaExclamationCircle/>Falta seleccionar colores</p>
                         }
-                        <h5 className="price">$ {l.price} (68)</h5>
+                        <h5 className="price">$ {l.price} ({l.price > 0 && l.quantity > 0 ? l.price / l.quantity : ''})</h5>
                         </div>
                     </div>
                     </>

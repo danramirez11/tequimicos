@@ -74,6 +74,7 @@ const LidForm = ({lid}: LidFormProps) => {
                 lid.colors.length === 0 && lid.name !== 'none' && <p className="error"><FaExclamationCircle/> Falta seleccionar colores</p>
             }
             <h4 className="price">$ {lid.price}</h4>
+            <h5 className="price">{lid.price > 0 && lid.quantity > 0 ? lid.price / lid.quantity : ''}</h5>
             </div>
         </section>
     );

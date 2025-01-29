@@ -9,6 +9,8 @@ p.error{
     font-weight: bold;
     text-align: right;
     padding: 12px;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 h5.price{

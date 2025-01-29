@@ -35,6 +35,9 @@ const ContOnlyForm = ({container}: ContOnlyFormProps) => {
                 </select>
                 <button className="red-simple" type="button" onClick={() => handleDeleteProduct(container.id)}>X</button>
             </div>
+
+            <h4 className="price">$ {container.price}</h4>
+            <h5 className="price">{container.price > 0 && container.quantity > 0 ? container.price / container.quantity : ''}</h5>
         </section>
     );
 }

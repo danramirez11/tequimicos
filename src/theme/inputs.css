@@ -30,6 +30,10 @@ input{
     transition: all 0.3s;
 }
 
+input:focus{
+    border-bottom: var(--blue) 2px solid;
+}
+
 input.opacity{
     color: var(--gray);
 }
