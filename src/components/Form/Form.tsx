@@ -14,9 +14,7 @@ const Form = () => {
     const { clients } = useSelector((state: StoreType) => state.clients)
 
     const personals = ['Valentina', 'Sebastian', 'Zulay', 'Dufay']
-    const paymentMethods = ['Efectivo','Transferencia']
-
-    
+    const paymentMethods = ['Efectivo','Transferencia', 'Nequi', 'Tarjeta']
 
 
     return (
@@ -58,7 +56,8 @@ const Form = () => {
 
             <div className="selling-form-btn">
             <p>añadir</p>
-            <button className="green" type="button" onClick={() => handleAddProduct('container')}>Envase</button>
+            <button className="green" type="button" onClick={() => handleAddProduct('container')}>Combo</button>
+            <button className="green">Envase</button>
             <button className="green" type="button" onClick={() => handleAddProduct('lid')}>Tapa</button>
             <button className="green" type="button" onClick={() => handleAddProduct('chemical')}>Químico</button>
             </div>
@@ -95,7 +94,6 @@ const Form = () => {
 
             { finishErrors.map((e, i) => <p className="error" key={i}>{e}</p>) }
 
-            <p>{JSON.stringify(clients)}</p>
 
             </form>
             

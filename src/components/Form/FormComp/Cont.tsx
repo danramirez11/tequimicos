@@ -97,7 +97,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                         {
                             ( l.colors.length === 0 || l.name === 'none') && <p className="error"> <FaExclamationCircle/>Falta seleccionar colores</p>
                         }
-                        <h5 className="price">$ {l.price}</h5>
+                        <h5 className="price">$ {l.price} (68)</h5>
                         </div>
                     </div>
                     </>

@@ -8,11 +8,15 @@ const PrintReceipt = () => {
 
     return (
         <section className="print-receipt">
-            <p>TODO ENVASES Y QUÍMICOS</p>
+            <p>Orden de pedido</p>
 
-            <p>{receipt.date} - {receipt.hour}</p>
+            <p>{receipt.isDelivery ? 'Domicilio' : 'Punto de venta'}</p>
+
+            <p>Pago: {receipt.payment}</p>
 
             <p>Cliente: {receipt.client}</p>
+
+            <br />
 
             <p><b>Productos</b></p>
 
@@ -67,6 +71,18 @@ const PrintReceipt = () => {
             <p>______________________________</p>
 
             <p className="price">Total: $ {receipt.total}</p>
+
+            <p>______________________________</p>
+
+            <p>Observaciones:</p>
+
+            <br /><br /><br /><br/><br/>
+
+            <p>Alistó: </p>
+
+            <br /><br />
+
+            <p>______________________________</p>
         </section>
     );
 }

@@ -1,9 +1,9 @@
 .print-receipt{
-    width: 8cm;
+    width: 7cm;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 5px;
+    padding: 0px;
     display: none;
 
     p{
