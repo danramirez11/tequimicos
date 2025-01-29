@@ -69,3 +69,14 @@ button.red-simple{
 button.red-simple:hover{
     color: var(--black);
 }
+
+/*YELLOW SIMPLE*/
+
+button.yellow-simple{
+    color: var(--yellow);
+    background-color: transparent;
+}
+
+button.yellow-simple:hover{
+    color: var(--red);
+}

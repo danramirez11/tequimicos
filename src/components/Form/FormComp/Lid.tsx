@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { StoreType } from "../../../store/store";
 import { ReceiptLid } from "../../../types/products";
-import { FaExclamationCircle } from "react-icons/fa";
-import { useContext } from "react";
+import { FaExchangeAlt, FaExclamationCircle } from "react-icons/fa";
+import { useContext, useState } from "react";
 import { FormContext } from "../../../context/formContext";
 import useSelectPicker from "../../../hooks/useSelectPicker";
 
@@ -15,6 +15,17 @@ const LidForm = ({lid}: LidFormProps) => {
     const { lids, loading } = useSelector((state: StoreType) => state.lids)
     const formContext = useContext(FormContext);
     const { lidFun, handleDeleteProduct } = formContext!;
+    const [ isCustomPrice, setIsCustomPrice ] = useState(false);
+
+    const handleCustomPrice = () => {
+        setIsCustomPrice((p) => {
+            if ( p === false ){
+                return true
+            } else {
+                lidFun.changeLidQuantity(lid.id, lid.quantity.toString())
+                return false
+            }})
+    }
 
     if (loading) return <p>Cargando...</p>
 
@@ -74,7 +85,16 @@ const LidForm = ({lid}: LidFormProps) => {
                 lid.colors.length === 0 && lid.name !== 'none' && <p className="error"><FaExclamationCircle/> Falta seleccionar colores</p>
             }
             <h4 className="price">$ {lid.price}</h4>
-            <h5 className="price">{lid.price > 0 && lid.quantity > 0 ? lid.price / lid.quantity : ''}</h5>
+
+            <div className="flex unit-price">
+                <button className="yellow-simple" onClick={() => handleCustomPrice()} type="button"><FaExchangeAlt/></button>
+                {
+                    isCustomPrice ?
+                    <input type="number" placeholder="Precio unidad" onChange={(e) => lidFun.changeUnitPrice(lid.id, e.target.value)} value={lid.price > 0 && lid.quantity > 0 ? lid.price / lid.quantity : 0}/>
+                    :
+                    <h5 className="price">{lid.price > 0 && lid.quantity > 0 ? lid.price / lid.quantity : ''}</h5>
+                }
+            </div>
             </div>
         </section>
     );

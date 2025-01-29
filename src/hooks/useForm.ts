@@ -315,6 +315,29 @@ const useForm = () => {
         })
     }
 
+    const summContainerPrices = (containerId: string) => {
+        setReceipt((p: Receipt) => {
+            const updatedReceipt = {
+                ...p.products.find((p) => p.id === containerId && p.type === 'container') as ReceiptContainer
+            };
+
+            const { lids } = updatedReceipt;
+
+            updatedReceipt.price = lids.reduce((total, lid) => total + lid.price, 0);
+
+            return {
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return updatedReceipt;
+                    } else {
+                        return product;
+                    }
+                })
+            }
+        })
+    }
+
     const updateLidPrice = (lidId: string, isPriceBySet?: boolean) => {
 
         setChosenProducts((p: any) => {
@@ -717,7 +740,34 @@ const useForm = () => {
                     }
                 })})
             })
-        }
+        },
+
+        changeLidUnitPrice: (containerId: string, lidId: string, priceString: string) => {
+            const priceUnit = Number(priceString)
+            setReceipt((p: Receipt) => ({
+
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        console.log('cambiando precio a ' + priceUnit)
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {...lid, price: lid.quantity * priceUnit}
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })
+            }))
+
+            summContainerPrices(containerId);
+        }  
     }
 
 
@@ -838,7 +888,21 @@ const useForm = () => {
             })
         
         updateLidPrice(lidId, true);
-        }    
+        },
+
+        changeUnitPrice: (lidId: string, priceString: string) => {
+            const priceUnit = Number(priceString)
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {...product, price: product.quantity * priceUnit}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        }
     }
 
     //CHEMICAL HANDLERS
@@ -987,6 +1051,20 @@ const useForm = () => {
             })
 
             updateContainerOnlyPrices(containerId, true);
+        },
+
+        changeUnitPrice: (containerId: string, priceString: string) => {
+            const priceUnit = Number(priceString)
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'containerOnly') {
+                        return {...product, price: product.quantity * priceUnit}
+                    } else {
+                        return product
+                    }
+                })
+            }))
         }
     }
 

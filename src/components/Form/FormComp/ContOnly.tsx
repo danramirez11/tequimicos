@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ReceiptContOnly } from "../../../types/products";
 import { FormContext } from "../../../context/formContext";
 import useSelectPicker from "../../../hooks/useSelectPicker";
 import { StoreType } from "../../../store/store";
 import { useSelector } from "react-redux";
+import { FaExchangeAlt } from "react-icons/fa";
 
 type ContOnlyFormProps = {
     container: ReceiptContOnly;
@@ -14,6 +15,19 @@ const ContOnlyForm = ({container}: ContOnlyFormProps) => {
     const formContext = useContext(FormContext);
     const { containerOnlyFun, handleDeleteProduct } = formContext!;
     const { combinations, loading } = useSelector((state: StoreType) => state.combinations)
+    const [ isCustomPrice, setIsCustomPrice ] = useState(false);
+
+    const handleCustomPrice = () => {
+        console.log('clicked')
+        setIsCustomPrice((p) => {
+            if ( p === false ){
+                return true
+            } else {
+                containerOnlyFun.changeQuantity(container.id, container.quantity.toString())
+                return false
+            }
+        })
+    }
 
     return (
         <section className="selling-form-product">
@@ -37,7 +51,19 @@ const ContOnlyForm = ({container}: ContOnlyFormProps) => {
             </div>
 
             <h4 className="price">$ {container.price}</h4>
-            <h5 className="price">{container.price > 0 && container.quantity > 0 ? container.price / container.quantity : ''}</h5>
+
+            <div className="flex unit-price">
+                <button className="yellow-simple" onClick={() => handleCustomPrice()} type="button"><FaExchangeAlt/></button> 
+
+                {
+                    isCustomPrice ?
+                    <input type="number" placeholder="Precio unidad" onChange={(e) => containerOnlyFun.changeUnitPrice(container.id, e.target.value)} value={container.price > 0 && container.quantity > 0 ? container.price / container.quantity : 0}/>
+                    :
+                    <h5 className="price"> {container.price > 0 && container.quantity > 0 ? container.price / container.quantity : ''}</h5>
+                }
+                
+            </div>
+            
         </section>
     );
 }

@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { FormContext } from "../../../context/formContext";
 import { ReceiptContainer } from "../../../types/products";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../../store/store";
 import useSelectPicker from "../../../hooks/useSelectPicker";
-import { FaExclamationCircle } from "react-icons/fa";
+import { FaExchangeAlt, FaExclamationCircle } from "react-icons/fa";
 
 type ContainerProps = {
     container: ReceiptContainer;
@@ -16,6 +16,19 @@ const ContainerForm = ({container}: ContainerProps) => {
     const { containerFun, handleDeleteProduct } = formContext!;
     const { combinations, loading } = useSelector((state: StoreType) => state.combinations)
     const { lids } = useSelector((state: StoreType) => state.lids)
+
+    const [ customPrices, setCustomPrices ] = useState<string[]>([])
+
+    const handleCustomPrices = (lidId: string) => {
+        setCustomPrices((p) => {
+            if ( p.includes(lidId) ){
+                containerFun.changeLidQuantity(container.id, lidId, container.lids.find(l => l.id === lidId)!.quantity.toString())
+                return p.filter((c) => c !== lidId)
+            } else {
+                return [...p, lidId]
+            }
+        })
+    }
 
 
     return (
@@ -97,7 +110,20 @@ const ContainerForm = ({container}: ContainerProps) => {
                         {
                             ( l.colors.length === 0 || l.name === 'none') && <p className="error"> <FaExclamationCircle/>Falta seleccionar colores</p>
                         }
-                        <h5 className="price">$ {l.price} ({l.price > 0 && l.quantity > 0 ? l.price / l.quantity : ''})</h5>
+
+                        <div className="flex unit-price">
+                            <button className="yellow-simple" type="button" onClick={() => handleCustomPrices(l.id)}><FaExchangeAlt/></button>
+
+                            <h5 className="price">$ {l.price}</h5>
+                            {
+                                customPrices.includes(l.id) ?
+                                <input type="number" placeholder="Precio unidad" onChange={(e) => containerFun.changeLidUnitPrice(container.id, l.id, e.target.value)} value={l.price > 0 && l.quantity > 0 ? l.price / l.quantity : 0}/>
+                                :
+                                <h5 className="price"> ( {l.price > 0 && l.quantity > 0 ? l.price / l.quantity : ''} )</h5>
+                            }
+
+                            
+                        </div>
                         </div>
                     </div>
                     </>

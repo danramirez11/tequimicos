@@ -52,3 +52,9 @@ div.filter-option-inner-inner{
 .selling-lid-container{
     margin-block: 10px 20px;
 }
+
+.unit-price{
+    justify-content: flex-end;
+    align-content: center;
+    gap: 0;
+}
