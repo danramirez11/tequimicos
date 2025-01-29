@@ -726,7 +726,6 @@ const useForm = () => {
     const lidFun = {
         changeLid: (lidId: string, lid: string) => {
             const chosenLid = JSON.parse(lid)
-            console.log(chosenLid)
             setChosenProducts((p: any) => ([...p, chosenLid]))
             setReceipt((p: Receipt) => ({
                 ...p,
@@ -889,11 +888,107 @@ const useForm = () => {
         },
     }
 
-    const containerOnlyFun = {
+    //CONTAINER ONLY HANDLRES
 
+    const updateContainerOnlyPrices = (containerId: string, isPriceBySet?: boolean) => {
+        setChosenProducts((p: any) => {
+            
+            setReceipt((prevReceipt) => {
+
+                const productId = prevReceipt.products.find((p) => p.id === containerId && p.type === 'containerOnly')?.productId;
+
+                const chosenProduct = p.find((p: any) => p.id === productId);
+
+                const updatedReceipt = {
+                    ...prevReceipt.products.find((p) => p.id === containerId && p.type === 'containerOnly') as ReceiptContOnly
+                };
+
+                console.log(chosenProduct)
+        
+                const { quantity } = updatedReceipt;
+    
+                updatedReceipt.pack = updatedReceipt.pack || 0;
+    
+                const isPackGreater = updatedReceipt.pack >= 100;
+    
+                if ( !isPriceBySet ) {
+                    if (quantity < 12) {
+                        updatedReceipt.priceBy = 'unit';
+                    } else if (quantity >= updatedReceipt?.pack) {
+                        updatedReceipt.priceBy = isPackGreater ? 'pack' : quantity >= 100 ? 'hundred' : 'pack';
+                    } else if ( quantity >= 100 ) {
+                        updatedReceipt.priceBy = 'hundred';
+                    } else {
+                        updatedReceipt.priceBy = 'dozen';
+                    }
+                }
+
+                updatedReceipt.price = chosenProduct.prices[updatedReceipt.priceBy] * quantity;
+    
+                return {
+                    ...prevReceipt,
+                    products: prevReceipt.products.map((product) => {
+                        if (product.id === containerId && product.type === 'containerOnly') {
+                            return updatedReceipt;
+                        } else {
+                            return product;
+                        }
+                    })
+                };
+            });
+
+            return p;
+        })
     }
 
-    //CONTAINER ONLY HANDLRES
+    const containerOnlyFun = {
+        changeContainer: (containerId: string, container: string) => {
+            const chosenContainer = JSON.parse(container)
+            setChosenProducts((p: any) => ([...p, chosenContainer]))
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'containerOnly') {
+                        return {...product, name: chosenContainer.name, productId: chosenContainer.id, pack: chosenContainer.pack}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+
+            updateContainerOnlyPrices(containerId);
+        },
+
+        changeQuantity: (containerId: string, quantityString: string) => {
+            const quantity = Number(quantityString)
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'containerOnly') {
+                        return {...product, quantity}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+
+            updateContainerOnlyPrices(containerId);
+        },
+
+        changePriceBy: (containerId: string, priceBy: PriceBy) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'containerOnly') {
+                        return {...product, priceBy: priceBy}
+                    } else {
+                        return product
+                    }
+                })})
+            })
+
+            updateContainerOnlyPrices(containerId, true);
+        }
+    }
 
     return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, handleDeleteProduct, clientFun, clientErrors, miscFun, containerOnlyFun }
 }

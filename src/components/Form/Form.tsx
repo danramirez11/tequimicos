@@ -52,7 +52,7 @@ const Form = () => {
                 } else if (p.type === 'chemical') {
                     return <p key={p.id}>chemical</p>
                 } else if (p.type === 'containerOnly') {
-                    return <ContOnlyForm key={p.id}/>
+                    return <ContOnlyForm key={p.id} container={p}/>
                 } else {
                     return <MiscForm key={p.id} product={p}/>
                 }

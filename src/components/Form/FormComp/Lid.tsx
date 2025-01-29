@@ -39,7 +39,7 @@ const LidForm = ({lid}: LidFormProps) => {
                 <select name="priceBy" onChange={(e) => lidFun.changePriceBy(lid.id, e.target.value)} value={lid.priceBy} id="" className="small">
                     <option value="unit">Unidad</option>
                     <option value="dozen">Docena</option>
-                    <option value="hundred">Ciento</option>
+                    <option value="hundred">Cien</option>
                     <option value="pack">Paca</option>
                 </select>
                 <button className="red-simple" type="button" onClick={() => handleDeleteProduct(lid.id)}>X</button>
