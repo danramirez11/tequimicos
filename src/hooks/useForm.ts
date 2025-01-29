@@ -844,7 +844,58 @@ const useForm = () => {
 
     //CHEMICAL HANDLERS
 
-    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, handleDeleteProduct, clientFun, clientErrors}
+    //MISC HANDLERS
+
+    const miscFun = {
+        changeName: (miscId: string, name: string) => {
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === miscId && product.type === 'misc') {
+                        return {...product, name}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        changeQuantity: (miscId: string, quantityString: string) => {
+            const quantity = Number(quantityString)
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === miscId && product.type === 'misc') {
+                        return {...product, quantity, price: product.priceUnit * quantity}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+
+        changePrice: (miscId: string, priceString: string) => {
+            const priceUnit = Number(priceString)
+            setReceipt((p: Receipt) => ({
+                ...p,
+                products: p.products.map((product) => {
+                    if (product.id === miscId && product.type === 'misc') {
+                        return {...product, priceUnit, price: product.quantity * priceUnit}
+                    } else {
+                        return product
+                    }
+                })
+            }))
+        },
+    }
+
+    const containerOnlyFun = {
+
+    }
+
+    //CONTAINER ONLY HANDLRES
+
+    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, handleDeleteProduct, clientFun, clientErrors, miscFun, containerOnlyFun }
 }
 
 export default useForm;
