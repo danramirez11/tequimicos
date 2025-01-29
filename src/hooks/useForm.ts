@@ -143,6 +143,10 @@ const useForm = () => {
                         errors.push(`La cantidad de envases y tapas no coincide en ${product.name}`);
                     }
 
+                    if (product.quantity === 0) {
+                        errors.push(`Falta cantidad en ${product.name}`);
+                    }
+
                     product.lids.forEach((lid) => {
                         if (lid.name === 'none') {
                             errors.push(`Falta seleccionar tapa en ${product.name}`);
@@ -156,6 +160,38 @@ const useForm = () => {
                             errors.push(`La cantidad de tapas y colores no coincide en ${product.name} - ${lid.name}`);
                         }
                     })
+                } else if ( product.type === 'lid') {
+                    if (product.name === 'none') {
+                        errors.push('Falta seleccionar tapa');
+                    }
+
+                    if (product.quantity === 0) {
+                        errors.push('Falta cantidad en tapa');
+                    }
+
+                    if (product.colors.length === 0) {
+                        errors.push('Falta seleccionar colores en tapa');
+                    }
+
+                    if (product.quantity !== product.colors.reduce((acc, color) => acc + color.quantity, 0)) {
+                        errors.push('La cantidad de tapas y colores no coincide');
+                    }
+                } else if ( product.type === 'containerOnly') {
+                    if (product.name === 'none') {
+                        errors.push('Falta seleccionar envase');
+                    }
+
+                    if (product.quantity === 0) {
+                        errors.push('Falta cantidad en envase');
+                    }
+                } else if ( product.type === 'misc') {
+                    if (product.name === '') {
+                        errors.push('Falta seleccionar producto');
+                    }
+
+                    if (product.quantity === 0) {
+                        errors.push('Falta cantidad en producto');
+                    }
                 }
             })
 

@@ -4,7 +4,7 @@ import { FormContext } from "../../../context/formContext";
 import useSelectPicker from "../../../hooks/useSelectPicker";
 import { StoreType } from "../../../store/store";
 import { useSelector } from "react-redux";
-import { FaExchangeAlt } from "react-icons/fa";
+import { FaExchangeAlt, FaExclamationCircle } from "react-icons/fa";
 
 type ContOnlyFormProps = {
     container: ReceiptContOnly;
@@ -49,6 +49,13 @@ const ContOnlyForm = ({container}: ContOnlyFormProps) => {
                 </select>
                 <button className="red-simple" type="button" onClick={() => handleDeleteProduct(container.id)}>X</button>
             </div>
+
+            {
+                container.name === 'none' && <p className="error"><FaExclamationCircle/>Falta seleccionar envase</p>
+            }
+            {
+                container.quantity === 0 && <p className="error"><FaExclamationCircle/>Falta cantidad</p>
+            }
 
             <h4 className="price">$ {container.price}</h4>
 

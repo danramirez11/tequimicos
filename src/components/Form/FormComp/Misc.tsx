@@ -18,6 +18,16 @@ const MiscForm = ({product}: MiscFormProps) => {
                 <input type="number" placeholder="Precio unidad" onChange={(e) => miscFun.changePrice(product.id, e.target.value)}/>
                 <button className="red-simple" type="button" onClick={() => handleDeleteProduct(product.id)}>X</button>
             </div>
+
+            {
+                product.name === '' && <p className="error">Falta nombre</p>
+            }
+            {
+                product.quantity === 0 && <p className="error">Falta cantidad</p>
+            }
+            {
+                product.priceUnit === 0 && <p className="error">Falta precio por unidad</p>
+            }
             <h4 className="price">$ {product.price}</h4>
         </section>
     )

@@ -84,6 +84,10 @@ const LidForm = ({lid}: LidFormProps) => {
             {
                 lid.colors.length === 0 && lid.name !== 'none' && <p className="error"><FaExclamationCircle/> Falta seleccionar colores</p>
             }
+            {
+                lid.quantity === 0 && <p className="error"><FaExclamationCircle/> Falta cantidad</p>
+            }
+            
             <h4 className="price">$ {lid.price}</h4>
 
             <div className="flex unit-price">

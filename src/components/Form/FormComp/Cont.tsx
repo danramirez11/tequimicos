@@ -139,6 +139,10 @@ const ContainerForm = ({container}: ContainerProps) => {
 
             { container.name === 'none' && <p className="error"> <FaExclamationCircle/>Falta seleccionar envase</p>}
 
+            {
+                container.quantity === 0 && <p className="error"> <FaExclamationCircle/>Falta cantidad</p>
+            }
+
 
         </section>
     )
