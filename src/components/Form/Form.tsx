@@ -6,6 +6,8 @@ import useSelectPicker from "../../hooks/useSelectPicker";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../store/store";
 import LidForm from "./FormComp/Lid";
+import ContOnlyForm from "./FormComp/ContOnly";
+import MiscForm from "./FormComp/Misc";
 
 const Form = () => {
     const formContext = useContext(FormContext);
@@ -47,8 +49,12 @@ const Form = () => {
                     return <ContainerForm key={p.id} container={p}/>
                 } else if (p.type === 'lid') {
                     return <LidForm key={p.id} lid={p}/>
-                } else {
+                } else if (p.type === 'chemical') {
                     return <p key={p.id}>chemical</p>
+                } else if (p.type === 'containerOnly') {
+                    return <ContOnlyForm key={p.id}/>
+                } else {
+                    return <MiscForm key={p.id} product={p}/>
                 }
             })}
 
@@ -57,9 +63,9 @@ const Form = () => {
             <div className="selling-form-btn">
             <p>añadir</p>
             <button className="green" type="button" onClick={() => handleAddProduct('container')}>Combo</button>
-            <button className="green">Envase</button>
+            <button className="green" type="button" onClick={() => handleAddProduct('containerOnly')}>Envase</button>
             <button className="green" type="button" onClick={() => handleAddProduct('lid')}>Tapa</button>
-            <button className="green" type="button" onClick={() => handleAddProduct('chemical')}>Químico</button>
+            <button className="green" type="button" onClick={() => handleAddProduct('misc')}>Producto</button>
             </div>
 
             <p>Personal</p>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { PriceBy, Receipt, ReceiptChemical, ReceiptContainer, ReceiptLid, Spout } from "../types/products";
+import { PriceBy, Receipt, ReceiptChemical, ReceiptContainer, ReceiptContOnly, ReceiptLid, ReceiptMisc, Spout } from "../types/products";
 import { Client, CombinationLid } from "../types/firebase";
 import { useEffect } from "react";
 import { addClienttoFirestore } from "../services/firestore";
@@ -53,6 +53,27 @@ const useForm = () => {
         unit: ''
     }
 
+    const emptyMisc: ReceiptMisc = {
+        productId: '',
+        id: '',
+        type: 'misc',
+        name: '',
+        price: 0,
+        priceUnit: 0,
+        quantity: 0
+    }
+
+    const emptyContainerOnly: ReceiptContOnly = {
+        priceBy: 'unit',
+        productId: '',
+        id: '',
+        type: 'containerOnly',
+        name: 'none',
+        price: 0,
+        quantity: 0,
+        pack: 0
+    }
+
     const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
     const [chosenProducts, setChosenProducts] = useState<any>([])
     const [ finishErrors, setFinishErrors ] = useState<string[]>([' '])
@@ -93,8 +114,12 @@ const useForm = () => {
             setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyContainer, id: crypto.randomUUID(), lids: [{...emptyLid, id: crypto.randomUUID()}]}]}))
         } else if (product === 'lid') {
             setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyLid, id: crypto.randomUUID()}]}))
-        } else {
+        } else if (product === 'chemical') {
             setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyChemical, id: crypto.randomUUID()}]}))
+        } else if (product === 'misc') {
+            setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyMisc, id: crypto.randomUUID()}]}))
+        } else {
+            setReceipt((p: Receipt) => ({...p, products: [...p.products, {...emptyContainerOnly, id: crypto.randomUUID()}]}))
         }
     }
 

@@ -2,7 +2,7 @@ export type Receipt = {
     client: string;
     date: string;
     hour: string;
-    products: (ReceiptContainer | ReceiptLid | ReceiptChemical)[]
+    products: (ReceiptContainer | ReceiptLid | ReceiptChemical | ReceiptMisc | ReceiptContOnly)[]
     total: number;
     personal: string;
     payment: string;
@@ -51,4 +51,25 @@ export type ReceiptChemical = {
     price: number;
     quantity: number;
     unit: string;
+}
+
+export type ReceiptMisc = {
+    productId: string;
+    id: string;
+    type: 'misc';
+    name: string;
+    price: number;
+    priceUnit: number;
+    quantity: number;
+}
+
+export type ReceiptContOnly = {
+    id: string;
+    type: 'containerOnly';
+    name: string;
+    price: number;
+    quantity: number;
+    priceBy: PriceBy;
+    productId: string;
+    pack: number;
 }

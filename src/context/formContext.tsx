@@ -9,7 +9,7 @@ interface formContextProps {
     handleMiscChange: (name: string, value: string) => void;
     handleIsDelivery: () => void;
     handleFinish: () => void;
-    handleAddProduct: (type: 'container' | 'lid' | 'chemical') => void;
+    handleAddProduct: (type: 'container' | 'lid' | 'chemical' | 'containerOnly' | 'misc') => void;
     finishErrors: string[];
     lidFun: any;
     handleDeleteProduct: (id: string) => void;
