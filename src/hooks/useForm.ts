@@ -159,6 +159,16 @@ const useForm = () => {
                         if (lid.quantity !== lid.colors.reduce((acc, color) => acc + color.quantity, 0)) {
                             errors.push(`La cantidad de tapas y colores no coincide en ${product.name} - ${lid.name}`);
                         }
+
+                        if (lid.lazo) {
+                            if (lid.lazo.length === 0) {
+                                errors.push(`Falta seleccionar lazos en ${product.name} - ${lid.name}`);
+                            }
+
+                            if (lid.quantity !== lid.lazo.reduce((acc, lazo) => acc + lazo.quantity, 0)) {
+                                errors.push(`La cantidad de tapas y lazos no coincide en ${product.name} - ${lid.name}`);
+                            }
+                        }
                     })
                 } else if ( product.type === 'lid') {
                     if (product.name === 'none') {
@@ -175,6 +185,16 @@ const useForm = () => {
 
                     if (product.quantity !== product.colors.reduce((acc, color) => acc + color.quantity, 0)) {
                         errors.push('La cantidad de tapas y colores no coincide');
+                    }
+
+                    if ( product.lazo ){
+                        if (product.lazo.length === 0) {
+                            errors.push(`Falta seleccionar lazos en ${product.name}`);
+                        }
+
+                        if (product.quantity !== product.lazo.reduce((acc, lazo) => acc + lazo.quantity, 0)) {
+                            errors.push(`La cantidad de tapas y lazos no coincide en ${product.name}`);
+                        }
                     }
                 } else if ( product.type === 'containerOnly') {
                     if (product.name === 'none') {
