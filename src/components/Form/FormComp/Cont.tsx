@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { StoreType } from "../../../store/store";
 import useSelectPicker from "../../../hooks/useSelectPicker";
 import { FaExchangeAlt, FaExclamationCircle } from "react-icons/fa";
+import { lazoColorsId } from "../../../utils/images";
 
 type ContainerProps = {
     container: ReceiptContainer;
@@ -54,7 +55,7 @@ const ContainerForm = ({container}: ContainerProps) => {
             <div className="indentation">
             { container.name !== 'none' && container.lids.map((l) => {
                 return (
-                    <>
+                    
                     <div key={l.id} className="selling-lid-container">
                         <div className="flex">
                         <select onChange={(e) => containerFun.changeLid(container.id, l.id, e.target.value)} name="lid" value={JSON.stringify({ name: l.name, id: l.productId})}>
@@ -99,6 +100,30 @@ const ContainerForm = ({container}: ContainerProps) => {
                             })
                         }
                         {
+                            l.name.toLowerCase().includes('lazo') && l.lazo &&
+                            <div className="indentation">
+                            {
+                                l.lazo.map((lazo) => {
+                                    return (
+                                        <div key={lazo.name} className="flex">
+                                            <select onChange={(e) => containerFun.changeLazo(container.id, l.id, lazo.name, 'name', e.target.value)} name="lazo" className="simple" value={lazo.name}>
+                                                <option value="none">Seleccionar lazo</option>
+                                                { 
+                                                    lids.find(lid => lid.id === lazoColorsId) && Object.keys(lids.find(lid => lid.id === lazoColorsId)?.colors || {}).map((c) => (
+                                                        <option key={c} value={c}>lazo: {c}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                            <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLazo(container.id, l.id, lazo.name, 'quantity', e.target.value)} value={lazo.quantity} className="opacity"/>
+                                            <button type="button" className="red-simple" onClick={() => containerFun.deleteLazo(container.id, l.id, lazo.name)}>X</button>
+                                        </div>
+                                    )
+                                })
+                            }
+                            <button type="button" className="blue-simple" onClick={() => containerFun.addLazo(container.id, l.id)}>+ añadir lazo</button>
+                            </div>
+                        }
+                        {
                             <button type="button" className="blue-simple" onClick={() => containerFun.addLidColor(container.id, l.id)}>+ añadir color</button>
                         }
                         { 
@@ -126,7 +151,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                         </div>
                         </div>
                     </div>
-                    </>
+                    
                 )
             })}
 

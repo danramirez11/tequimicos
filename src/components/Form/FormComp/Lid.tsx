@@ -5,6 +5,7 @@ import { FaExchangeAlt, FaExclamationCircle } from "react-icons/fa";
 import { useContext, useState } from "react";
 import { FormContext } from "../../../context/formContext";
 import useSelectPicker from "../../../hooks/useSelectPicker";
+import { lazoColorsId } from "../../../utils/images";
 
 type LidFormProps = {
     lid: ReceiptLid,
@@ -68,10 +69,34 @@ const LidForm = ({lid}: LidFormProps) => {
                             }
                         </select>
                         <input type="number" placeholder="Cantidad" value={c.quantity} onChange={(e) => lidFun.changeLidColor(lid.id, c.name, 'quantity', e.target.value)}/>
-                        <button className="red-simple" type="button" onClick={() => lidFun.deleteColor()}>X</button>
+                        <button className="red-simple" type="button" onClick={() => lidFun.deleteColor(lid.id, c.name)}>X</button>
                     </div>
                 )
             })}
+
+            {
+                lid.lazo && lid.name.toLowerCase().includes('lazo') &&
+                <div className="indentation">
+                    {
+                        lid.lazo.map((l) => {
+                            return (
+                                <div key={l.name} className="flex indentation">
+                                    <select name="name" id="" className="simple" value={l.name} onChange={(e) => lidFun.changeLidLazo(lid.id, l.name, 'name', e.target.value)}>
+                                        <option value="none">Seleccionar lazo</option>
+                                        {
+                                            lids.find(li => li.id === lazoColorsId) && Object.keys(lids.find(li => li.id === lazoColorsId)!.colors || {}).map((color) =>
+                                                <option key={color} value={color}>lazo: {color}</option>)
+                                        }
+                                    </select>
+                                    <input type="number" placeholder="Cantidad" value={l.quantity} onChange={(e) => lidFun.changeLidLazo(lid.id, l.name, 'quantity', e.target.value)}/>
+                                    <button className="red-simple" type="button" onClick={() => lidFun.deleteLazo(lid.id, l.name)}>X</button>
+                                </div>
+                            )
+                        })
+                    }
+                    <button type="button" className="blue-simple" onClick={() => lidFun.addLazo(lid.id)}>+ añadir lazo</button>
+                </div>
+            }
             
             <button type="button" className="blue-simple" onClick={() => lidFun.addLidColor(lid.id)}>+ añadir color</button>
             

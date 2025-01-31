@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import './SideBar.css';
 import { FaCashRegister, FaHistory } from 'react-icons/fa';
+import { logoPng } from '../../utils/images';
 
 const SideBar = () => {
     return (
         <section className="sidebar">
-            <h3>Todo envases y químicos</h3>
+            <img src={logoPng} alt="Logo de Todo Envases y Químicos" />
 
             <div className='sidebar-links'>
 

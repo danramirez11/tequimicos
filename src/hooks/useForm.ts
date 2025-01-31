@@ -538,7 +538,7 @@ const useForm = () => {
                             ...product,
                             lids: product.lids.map((lid) => {
                                 if (lid.id === lidId) {
-                                    return {...lid, name: chosenLid.name, productId: chosenLid.id, spout: chosenLid.name.toLowerCase().includes('pitorro') ? 'eco' : undefined}
+                                    return {...lid, name: chosenLid.name, productId: chosenLid.id, spout: chosenLid.name.toLowerCase().includes('pitorro') ? 'eco' : undefined, lazo: chosenLid.name.toLowerCase().includes('lazo') ? [{name: 'none', quantity: 0}] : undefined}
                                 } else {
                                     return lid
                                 }
@@ -803,7 +803,85 @@ const useForm = () => {
             }))
 
             summContainerPrices(containerId);
-        }  
+        },
+
+        changeLazo: (containerId: string, lidId: string, name: string, key: string, value: string) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {
+                                        ...lid,
+                                        lazo: lid.lazo?.map((l) => {
+                                            if (l.name === name) {
+                                                return {...l, [key]: key === 'quantity' ? Number(value) : value}
+                                            } else {
+                                                return l
+                                            }
+                                        })
+                                    }
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })})
+            })
+        },
+
+        deleteLazo: (containerId: string, lidId: string, name: string) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {
+                                        ...lid,
+                                        lazo: lid.lazo?.filter((l) => l.name !== name)
+                                    }
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })})
+            })
+        },
+
+        addLazo: (containerId: string, lidId: string) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === containerId && product.type === 'container') {
+                        return {
+                            ...product,
+                            lids: product.lids.map((lid) => {
+                                if (lid.id === lidId) {
+                                    return {
+                                        ...lid,
+                                        lazo: [...(lid.lazo || []), { name: crypto.randomUUID(), quantity: 0 }]
+                                    }
+                                } else {
+                                    return lid
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })})
+            })
+        }
     }
 
 
@@ -817,7 +895,7 @@ const useForm = () => {
                 ...p,
                 products: p.products.map((product) => {
                     if (product.id === lidId && product.type === 'lid') {
-                        return {...product, name: chosenLid.name, productId: chosenLid.id, pack: chosenLid.pack, spout: chosenLid.name.toLowerCase().includes('pitorro') ? 'eco' : undefined}
+                        return {...product, name: chosenLid.name, productId: chosenLid.id, pack: chosenLid.pack, spout: chosenLid.name.toLowerCase().includes('pitorro') ? 'eco' : undefined, lazo: chosenLid.name.toLowerCase().includes('lazo') ? [{name: 'none', quantity: 0}] : undefined}
                     } else {
                         return product
                     }
@@ -938,6 +1016,57 @@ const useForm = () => {
                     }
                 })
             }))
+        },
+
+        changeLidLazo: (lidId: string, name: string, key: string, value: string) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {
+                            ...product,
+                            lazo: product.lazo?.map((l) => {
+                                if (l.name === name) {
+                                    return {...l, [key]: key === 'quantity' ? Number(value) : value}
+                                } else {
+                                    return l
+                                }
+                            })
+                        }
+                    } else {
+                        return product
+                    }
+                })})
+            })
+        },
+
+        deleteLazo: (lidId: string, name: string) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {
+                            ...product,
+                            lazo: product.lazo?.filter((l) => l.name !== name)
+                        }
+                    } else {
+                        return product
+                    }
+                })})
+            })
+        },
+
+        addLazo: (lidId: string) => {
+            setReceipt((p: Receipt) => {
+                return ({...p, products: p.products.map((product) => {
+                    if (product.id === lidId && product.type === 'lid') {
+                        return {
+                            ...product,
+                            lazo: [...(product.lazo || []), { name: 'none', quantity: 0 }]
+                        }
+                    } else {
+                        return product
+                    }
+                })})
+            })
         }
     }
 
