@@ -65,7 +65,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                         </select>
                         { l.name.toLowerCase().includes("pitorro") && 
                             <select name="spout" onChange={(e) => containerFun.changeSpout(container.id, l.id, e.target.value)} value={l.spout || 'eco'}>
-                                <option value="eco">Económico</option>
+                                <option value="eco">Anterior</option>
                                 <option value="lab">Laboratorio</option>
                             </select>
                         }

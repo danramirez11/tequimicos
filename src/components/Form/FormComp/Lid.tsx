@@ -42,7 +42,7 @@ const LidForm = ({lid}: LidFormProps) => {
                 {
                     lid.name.toLowerCase().includes("pitorro") && 
                     <select name="spout" id="">
-                        <option value="eco">Económico</option>
+                        <option value="eco">Anterior</option>
                         <option value="lab">Laboratorio</option>
                     </select>
                 }
