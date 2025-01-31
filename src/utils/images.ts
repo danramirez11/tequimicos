@@ -1,0 +1,1 @@
+export const logoPng = 'https://raw.githubusercontent.com/danramirez11/tequimicos/refs/heads/main/images/logo-todo-envases.png'
