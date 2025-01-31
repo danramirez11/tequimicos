@@ -1,4 +1,3 @@
-import FireTest from "../../components/FireTest/FireTest";
 import Form from "../../components/Form/Form";
 import PrintReceipt from "../../components/PrintReceipt/PrintReceipt";
 import { FormProvider } from "../../context/formContext";
@@ -11,7 +10,6 @@ const SellingPage = () => {
         <h1>Pedidos</h1>
         <Form/>
         <PrintReceipt/>
-        <FireTest/>
         </section>
         </FormProvider>
     )
