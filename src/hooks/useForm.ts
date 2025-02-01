@@ -9,7 +9,8 @@ import { StoreType } from "../store/store";
 
 const useForm = () => {
     const emptyReceipt: Receipt = {
-        client: '',
+        id: '',
+        client: 'Sin nombre',
         date: '',
         hour: '',
         products: [],
@@ -74,11 +75,13 @@ const useForm = () => {
         pack: 0
     }
 
-    const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt})
+    const [receipt , setReceipt] = useState<Receipt>({...emptyReceipt, id: 'none'})
     const [chosenProducts, setChosenProducts] = useState<any>([])
     const [ finishErrors, setFinishErrors ] = useState<string[]>([' '])
     const [ clientForm, setClientForm ] = useState<Client>({id: '', name: ''})
     const [ clientErrors, setClientErrors ] = useState<string>('')
+    const [ allReceipts, setAllReceipts ] = useState<Receipt[]>([])
+    const [ activeReceipt, setActiveReceipt ] = useState<string | null>(null)
 
     const { clients } = useSelector((state: StoreType) => state.clients)
 
@@ -90,8 +93,6 @@ const useForm = () => {
             setReceipt((p: Receipt) => ({...p, total}))
         };
 
-        console.log('hola')
-
         handleReceiptChange();
     }, [receipt.products]);
 
@@ -102,6 +103,40 @@ const useForm = () => {
             setFinishErrors([' '])
         }
     }, [finishErrors])
+
+    useEffect(() => {
+        setAllReceipts((p: Receipt[]) => p.map((r) => r.id === receipt.id ? receipt : r))
+    }, [receipt])
+
+    useEffect(() => {
+        if (activeReceipt) {
+            setReceipt(allReceipts.find((r) => r.id === activeReceipt) as Receipt)
+        } else {
+            setReceipt({...emptyReceipt, id: 'none'})
+        }
+    }, [activeReceipt])
+
+    //RECEIPT HANDLERS
+
+    const receiptFun = {
+        addReceipt: () => {
+            const newReceiptId = crypto.randomUUID();
+            setAllReceipts((p: Receipt[]) => ([...p, {...emptyReceipt, id: newReceiptId}]))
+            setActiveReceipt(newReceiptId)
+            setAllReceipts((p: Receipt[]) => p.find((r) => r.id === 'none') ? p.filter((r) => r.id !== 'none') : p)
+        },
+
+        deleteReceipt: (id: string) => {
+            const nextIndex = allReceipts.findIndex((r) => r.id === id) + 1;
+
+            setAllReceipts((p: Receipt[]) => p.filter((r) => r.id !== id))
+            setActiveReceipt(nextIndex < allReceipts.length ? allReceipts[nextIndex].id : null);
+        },
+
+        changeActiveReceipt: (id: string) => {
+            setActiveReceipt(id)
+        }
+    }
 
     //BASIC FORM HANDLERS
 
@@ -318,7 +353,6 @@ const useForm = () => {
             };
         });
 
-        console.log(chosenProducts)
 
         updatePricesContainer(containerId);
     };
@@ -337,14 +371,12 @@ const useForm = () => {
                     ...prev.products.find((p) => p.id === containerId && p.type === 'container') as ReceiptContainer
                 }
     
-                console.log(chosenProducts)
     
                 const { lids } = updatedReceipt;
     
                 lids.forEach((l) => {
                     const chosenLid = chosenProduct?.lids.find((cl: CombinationLid) => cl.id === l.productId);
 
-                    console.log(chosenLid)
     
                     if (chosenLid) {
                         l.price = chosenLid.prices[l.priceBy] * l.quantity;
@@ -353,7 +385,6 @@ const useForm = () => {
     
                 updatedReceipt.price = lids.reduce((total, lid) => total + lid.price, 0);
 
-                console.log(updatedReceipt.price)
     
                 return {
                     ...prev,
@@ -464,7 +495,6 @@ const useForm = () => {
 
 
             if (key === 'name') {
-                console.log(value)
                 if (clients.find((c) => c.name === value.trim())) {
                     setClientErrors('El cliente ya existe')
                 } else {
@@ -805,7 +835,6 @@ const useForm = () => {
                 ...p,
                 products: p.products.map((product) => {
                     if (product.id === containerId && product.type === 'container') {
-                        console.log('cambiando precio a ' + priceUnit)
                         return {
                             ...product,
                             lids: product.lids.map((lid) => {
@@ -963,12 +992,10 @@ const useForm = () => {
         },
 
         addLidColor: (lidId: string) => {
-            console.log('añadir color arriba')
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
                     if (product.id === lidId && product.type === 'lid') {
-                        console.log('añadir color')
                         return {
                             ...product,
                             colors: [...product.colors, { name: crypto.randomUUID(), quantity: 0 }]
@@ -1152,7 +1179,6 @@ const useForm = () => {
                     ...prevReceipt.products.find((p) => p.id === containerId && p.type === 'containerOnly') as ReceiptContOnly
                 };
 
-                console.log(chosenProduct)
         
                 const { quantity } = updatedReceipt;
     
@@ -1253,7 +1279,7 @@ const useForm = () => {
         }
     }
 
-    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, handleDeleteProduct, clientFun, clientErrors, miscFun, containerOnlyFun }
+    return { receipt, containerFun, lidFun, finishErrors, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, handleDeleteProduct, clientFun, clientErrors, miscFun, containerOnlyFun, allReceipts, activeReceipt, receiptFun }
 }
 
 export default useForm;

@@ -28,7 +28,6 @@ const App = () => {
 
         // Subscribe to real-time updates
         const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
-            console.log('Client data updated');
             const clients = snapshot.docs.map((doc) => ({
                 ...doc.data(),
             }));
@@ -219,7 +218,7 @@ const App = () => {
 
     lids.forEach(lid => {
         if (lid.colors && Object.prototype.hasOwnProperty.call(lid.colors, 'none')) {
-            console.log(`${lid.name} no tiene colores`, lid.id)
+            //console.log(`${lid.name} no tiene colores`, lid.id)
         } else {
             return
         }
@@ -230,11 +229,11 @@ const App = () => {
         const lidFound = lids.find(lid => lid.name === colorSinEspacios);
 
         if (!lidFound) {
-            console.log(`No se encontró ${colorSinEspacios}`);
+            //console.log(`No se encontró ${colorSinEspacios}`);
         }
     })
 
-    console.log('-------------------------')
+    //console.log('-------------------------')
 
     if (loadClient || loadLids || loadCombos) {
         return <h1>Cargando</h1>

@@ -1,8 +1,15 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+
+// Declare $ property on window object
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    $: any;
+  }
+}
 import { FormContext } from "../../context/formContext";
 import ContainerForm from "./FormComp/Cont";
 import './Form.css'
-import useSelectPicker from "../../hooks/useSelectPicker";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../store/store";
 import LidForm from "./FormComp/Lid";
@@ -11,13 +18,37 @@ import MiscForm from "./FormComp/Misc";
 
 const Form = () => {
     const formContext = useContext(FormContext);
-    useSelectPicker();
+    
     const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, finishErrors, clientFun, clientErrors } = formContext!;
+    
     const { clients } = useSelector((state: StoreType) => state.clients)
+
+    useEffect(() => {
+        const initSelectPicker = () => {
+          const $select = window.$(".selectpicker");
+          if ($select.length > 0) {
+            $select.selectpicker("destroy").selectpicker(); // Reinitialize
+          }
+        };
+      
+        initSelectPicker();
+      
+        // Ensure reinitialization after small delay (React rendering timing issue)
+        setTimeout(initSelectPicker, 100);
+      
+      }, [receipt, clients]);
 
     const personals = ['Valentina', 'Sebastian', 'Zulay', 'Dufay']
     const paymentMethods = ['Efectivo','Transferencia', 'Nequi', 'Tarjeta']
 
+
+    if (receipt.id === 'none') {
+        return (
+            <form className="selling-form">
+            <p>No hay pedidos actualmente</p>
+            </form>
+        )
+    }
 
     return (
             <form className="selling-form">
@@ -92,7 +123,7 @@ const Form = () => {
             </div>
 
             <div className="form-delivery">
-            <input type="checkbox" name="isDelivery" onClick={() => handleIsDelivery()}/>
+            <input type="checkbox" name="isDelivery" onClick={() => handleIsDelivery()} checked={receipt.isDelivery}/>
             <label htmlFor="isDelivery">Domicilio</label>
             </div>
 

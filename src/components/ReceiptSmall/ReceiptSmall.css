@@ -1,0 +1,33 @@
+.receipts-small{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 30vw;
+    padding: 20px;
+}
+
+.small-receipt{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-bottom: var(--gray) 2px solid;
+    padding: 10px;
+
+    p{
+        margin: 0;
+    }
+
+    .product-name{
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.active-receipt{
+    border: var(--blue) 2px solid;
+    border-radius: 15px;
+}

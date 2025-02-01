@@ -1,4 +1,5 @@
 export type Receipt = {
+    id: string;
     client: string;
     date: string;
     hour: string;

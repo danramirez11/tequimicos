@@ -17,6 +17,9 @@ interface formContextProps {
     clientErrors: string;
     miscFun: any;
     containerOnlyFun: any;
+    allReceipts: Receipt[];
+    activeReceipt: string | null;
+    receiptFun: any;
 }
 
 export const FormContext = createContext<formContextProps | undefined>(undefined);
@@ -35,7 +38,10 @@ export const FormProvider: React.FC<{children: ReactNode}> = ({children}) => {
         clientFun,
         clientErrors,
         miscFun,
-        containerOnlyFun
+        containerOnlyFun,
+        allReceipts,
+        activeReceipt,
+        receiptFun
     } = useForm();
 
     return (
@@ -52,7 +58,10 @@ export const FormProvider: React.FC<{children: ReactNode}> = ({children}) => {
             clientFun,
             clientErrors,
             miscFun,
-            containerOnlyFun
+            containerOnlyFun,
+            allReceipts,
+            activeReceipt,
+            receiptFun
         }}>
             {children}
         </FormContext.Provider>

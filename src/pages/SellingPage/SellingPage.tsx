@@ -2,13 +2,20 @@ import Form from "../../components/Form/Form";
 import PrintReceipt from "../../components/PrintReceipt/PrintReceipt";
 import { FormProvider } from "../../context/formContext";
 import './SellingPage.css';
+import ReceiptSmall from "../../components/ReceiptSmall/ReceiptSmall";
 
 const SellingPage = () => {
+
     return (
         <FormProvider>
         <section className="page selling-page">
         <h1>Pedidos</h1>
-        <Form/>
+        <div className="flex">
+            <Form/>
+            <section className="selling-receipts-thumbnail">
+                <ReceiptSmall/>
+            </section>
+        </div>
         <PrintReceipt/>
         </section>
         </FormProvider>
