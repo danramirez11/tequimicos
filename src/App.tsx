@@ -216,13 +216,196 @@ const App = () => {
         }
     ]
 
+    const excelLids = [
+        {
+            "Tapa": "Boticaria 24"
+        },
+        {
+            "Tapa": "Boticaria 28"
+        },
+        {
+            "Tapa": "Lazo Colores surtidos"
+        },
+        {
+            "Tapa": "Pistola 28 "
+        },
+        {
+            "Tapa": "Pistola Semi Industrial 28"
+        },
+        {
+            "Tapa": "Pistola Industrial 28"
+        },
+        {
+            "Tapa": "Pistola Mini 24"
+        },
+        {
+            "Tapa": "Pistola Mini 28"
+        },
+        {
+            "Tapa": "Pitorros Eco"
+        },
+        {
+            "Tapa": "Pitorros Laborat."
+        },
+        {
+            "Tapa": "Subtapa 28"
+        },
+        {
+            "Tapa": "Subtapa 36 Garrafa"
+        },
+        {
+            "Tapa": "Tapa Gotero 12"
+        },
+        {
+            "Tapa": "Tapa Sencilla 18"
+        },
+        {
+            "Tapa": "Tapa Sencilla 24"
+        },
+        {
+            "Tapa": "Tapa con liner 24"
+        },
+        {
+            "Tapa": "Tapa 26 corta (pet 150)"
+        },
+        {
+            "Tapa": "Tapa Seg. 28"
+        },
+        {
+            "Tapa": "Tapa Corta Seg. 28"
+        },
+        {
+            "Tapa": "Tapa Seg. Garrafa 38"
+        },
+        {
+            "Tapa": "Tapa Sencilla 38"
+        },
+        {
+            "Tapa": "Tapa Yogurt 38"
+        },
+        {
+            "Tapa": "Tapa 52"
+        },
+        {
+            "Tapa": "Tapa 65"
+        },
+        {
+            "Tapa": "Tapa 70"
+        },
+        {
+            "Tapa": "Tapa 82"
+        },
+        {
+            "Tapa": "Tapa 83"
+        },
+        {
+            "Tapa": "Tapa 84"
+        },
+        {
+            "Tapa": "Cremera 24"
+        },
+        {
+            "Tapa": "Cremera 28"
+        },
+        {
+            "Tapa": "Cremera Lujo 28"
+        },
+        {
+            "Tapa": "Tapa Distop 24"
+        },
+        {
+            "Tapa": "Tapa Distop Larga 24/415"
+        },
+        {
+            "Tapa": "Tapa Distop 28"
+        },
+        {
+            "Tapa": "Tapa Fliptop 18"
+        },
+        {
+            "Tapa": "Tapa Distop Lujo 24"
+        },
+        {
+            "Tapa": "Tapa Fliptop 24"
+        },
+        {
+            "Tapa": "Tapa Fliptop 28"
+        },
+        {
+            "Tapa": "Tapa Metalizada 18"
+        },
+        {
+            "Tapa": "Tapa Metalizada 24"
+        },
+        {
+            "Tapa": "Tapa Metalizada 28"
+        },
+        {
+            "Tapa": "Tapa Push Pull 24"
+        },
+        {
+            "Tapa": "Tapa Push Pull 28"
+        },
+        {
+            "Tapa": "Spray 18"
+        },
+        {
+            "Tapa": "Spray 24"
+        },
+        {
+            "Tapa": "Spray larga 24/415"
+        },
+        {
+            "Tapa": "Spray Lujo 24"
+        },
+        {
+            "Tapa": "Spray 28"
+        },
+        {
+            "Tapa": "Tapa Vinilo 120ml"
+        },
+        {
+            "Tapa": "Tapa Vinilo 33g"
+        },
+        {
+            "Tapa": "Tapa vinilo 60g"
+        },
+        {
+            "Tapa": "Tapa Twist 28"
+        },
+        {
+            "Tapa": "Tapa Pico 28"
+        },
+        {
+            "Tapa": "Tapa Fliptop Cosmetica 24"
+        },
+        {
+            "Tapa": "Tapa Galon Pet"
+        },
+        {
+            "Tapa": "Tapa Fliptop Cosmetica 28"
+        }
+    ]
+
     lids.forEach(lid => {
         if (lid.colors && Object.prototype.hasOwnProperty.call(lid.colors, 'none')) {
             //console.log(`${lid.name} no tiene colores`, lid.id)
-        } else {
-            return
+        } 
+
+        if (lid.pack === 0){
+            console.log(`${lid.name} no tiene pack`, lid.id)
         }
     })
+
+    lids.forEach(lid => {
+        const lidFound = excelLids.find(lidExcel => lidExcel.Tapa.trim() === lid.name);
+
+        if (!lidFound) {
+            console.log(`${lid.name} no tiene precios solos`);
+        }
+    })
+
+    
 
     colors.forEach((color) => {
         const colorSinEspacios = color.TAPA.trim();
@@ -233,7 +416,7 @@ const App = () => {
         }
     })
 
-    //console.log('-------------------------')
+    console.log('-------------------------')
 
     if (loadClient || loadLids || loadCombos) {
         return <h1>Cargando</h1>

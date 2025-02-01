@@ -64,3 +64,22 @@ div.filter-option-inner-inner{
         padding: 0;
     }
 }
+
+.misc-product{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    label{
+        margin: 0;
+    }
+
+    input{
+        width: 100%;
+    }
+
+    input.small{
+        width: 20%;
+    }
+}

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 // Declare $ property on window object
 declare global {
@@ -23,20 +23,16 @@ const Form = () => {
     
     const { clients } = useSelector((state: StoreType) => state.clients)
 
+    const clientSelectRef = useRef(null)
+
     useEffect(() => {
-        const initSelectPicker = () => {
-          const $select = window.$(".selectpicker");
+          const $select = window.$(clientSelectRef.current);
           if ($select.length > 0) {
-            $select.selectpicker("destroy").selectpicker(); // Reinitialize
+            $select.selectpicker("val", receipt.client); // Manually update value
+            $select.selectpicker("refresh");
           }
-        };
       
-        initSelectPicker();
-      
-        // Ensure reinitialization after small delay (React rendering timing issue)
-        setTimeout(initSelectPicker, 100);
-      
-      }, [receipt, clients]);
+    }, [receipt]);
 
     const personals = ['Valentina', 'Sebastian', 'Zulay', 'Dufay']
     const paymentMethods = ['Efectivo','Transferencia', 'Nequi', 'Tarjeta']
@@ -53,7 +49,7 @@ const Form = () => {
     return (
             <form className="selling-form">
             <div className="flex">
-            <select name="client" id="" className="selectpicker w-50" data-live-search="true" value={receipt.client} onChange={(e) => handleMiscChange(e.target.name, e.target.value)}>
+            <select ref={clientSelectRef} name="client" id="" className="selectpicker w-50" data-live-search="true" value={receipt.client} onChange={(e) => handleMiscChange(e.target.name, e.target.value)}>
                 <option value="none">Seleccionar cliente</option>   
                 <option value="add">Añadir cliente</option>
                 { clients.map((c, i) => 
@@ -123,7 +119,7 @@ const Form = () => {
             </div>
 
             <div className="form-delivery">
-            <input type="checkbox" name="isDelivery" onClick={() => handleIsDelivery()} checked={receipt.isDelivery}/>
+            <input type="checkbox" name="isDelivery" onChange={() => handleIsDelivery()} checked={receipt.isDelivery}/>
             <label htmlFor="isDelivery">Domicilio</label>
             </div>
 

@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ReceiptContOnly } from "../../../types/products";
 import { FormContext } from "../../../context/formContext";
-import useSelectPicker from "../../../hooks/useSelectPicker";
 import { StoreType } from "../../../store/store";
 import { useSelector } from "react-redux";
 import { FaExchangeAlt, FaExclamationCircle } from "react-icons/fa";
@@ -11,7 +10,6 @@ type ContOnlyFormProps = {
 }
 
 const ContOnlyForm = ({container}: ContOnlyFormProps) => {
-    useSelectPicker();
     const formContext = useContext(FormContext);
     const { containerOnlyFun, handleDeleteProduct } = formContext!;
     const { combinations, loading } = useSelector((state: StoreType) => state.combinations)
@@ -29,18 +27,29 @@ const ContOnlyForm = ({container}: ContOnlyFormProps) => {
         })
     }
 
+    const contOnlySelectRef = useRef(null)
+
+    useEffect(() => {
+                  const $select = window.$(contOnlySelectRef.current);
+                  if ($select.length > 0) {
+                    $select.selectpicker("val", container.productId); // Manually update value
+                    $select.selectpicker("refresh");
+                  }
+              
+    }, [container.productId]);
+
     return (
         <section className="selling-form-product">
             { loading && <p>Cargando..</p> }
 
             <div className="flex">
-                <select onChange={(e) => containerOnlyFun.changeContainer(container.id, e.target.value)} name="container" className="selectpicker search-box w-100" data-live-search="true">
+                <select onChange={(e) => containerOnlyFun.changeContainer(container.id, e.target.value)} name="container" className="selectpicker search-box w-100" data-live-search="true" ref={contOnlySelectRef}>
                     <option value="none">Seleccionar envase</option>
                     { combinations.map((c) => 
-                        <option key={c.id} value={JSON.stringify(c)}>{c.name}</option>
+                        <option key={c.id} value={c.id}>{c.name}</option>
                     )}
                 </select>
-                <input type="number" placeholder="Cantidad" onChange={(e) => containerOnlyFun.changeQuantity(container.id, e.target.value)}/>
+                <input type="number" placeholder="Cantidad" onChange={(e) => containerOnlyFun.changeQuantity(container.id, e.target.value)} value={container.quantity}/>
                 <select name="priceBy" value={container.priceBy} onChange={(e) => containerOnlyFun.changePriceBy(container.id, e.target.value)} className="small">
                     <option value="unit">Unidad</option>
                     <option value="dozen">Docena</option>

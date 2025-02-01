@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FormContext } from "../../../context/formContext";
 import { ReceiptContainer } from "../../../types/products";
 import { useSelector } from "react-redux";
 import { StoreType } from "../../../store/store";
-import useSelectPicker from "../../../hooks/useSelectPicker";
 import { FaExchangeAlt, FaExclamationCircle } from "react-icons/fa";
 import { lazoColorsId } from "../../../utils/images";
 
@@ -12,7 +11,6 @@ type ContainerProps = {
 }
 
 const ContainerForm = ({container}: ContainerProps) => {
-    useSelectPicker();
     const formContext = useContext(FormContext);
     const { containerFun, handleDeleteProduct } = formContext!;
     const { combinations, loading } = useSelector((state: StoreType) => state.combinations)
@@ -31,20 +29,31 @@ const ContainerForm = ({container}: ContainerProps) => {
         })
     }
 
+    const contSelectRef = useRef(null)
+
+    useEffect(() => {
+              const $select = window.$(contSelectRef.current);
+              if ($select.length > 0) {
+                $select.selectpicker("val", container.productId); // Manually update value
+                $select.selectpicker("refresh");
+              }
+          
+    }, [container.productId]);
+
 
     return (
         <section className="selling-form-product">
             { loading && <p>Cargando...</p>}
 
             <div className="flex">
-            <select onChange={(e) => containerFun.changeContainer(container.id, e.target.value)} name="container" className="selectpicker search-box w-100" data-live-search="true">
+            <select onChange={(e) => containerFun.changeContainer(container.id, e.target.value)} name="container" className="selectpicker search-box w-100" data-live-search="true" ref={contSelectRef}>
                 <option value="none">Seleccionar envase</option>
                 { combinations.map((c, i) => 
-                    <option key={i} value={JSON.stringify(c)}>{c.name}</option>
+                    <option key={i} value={c.id}>{c.name}</option>
                 )}
             </select>
 
-            <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)}/>
+            <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)} value={container.quantity}/>
 
 
 

@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { StoreType } from "../../../store/store";
 import { ReceiptLid } from "../../../types/products";
 import { FaExchangeAlt, FaExclamationCircle } from "react-icons/fa";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FormContext } from "../../../context/formContext";
 import useSelectPicker from "../../../hooks/useSelectPicker";
 import { lazoColorsId } from "../../../utils/images";
@@ -28,16 +28,27 @@ const LidForm = ({lid}: LidFormProps) => {
             }})
     }
 
+    const lidSelectRef = useRef(null)
+
+    useEffect(() => {
+                      const $select = window.$(lidSelectRef.current);
+                      if ($select.length > 0) {
+                        $select.selectpicker("val", lid.productId); // Manually update value
+                        $select.selectpicker("refresh");
+                      }
+                  
+    }, [lid.productId]);
+
     if (loading) return <p>Cargando...</p>
 
     return (
         <section className="selling-form-product">
 
             <div className="flex">
-                <select name="lid" className="selectpicker search-box w-100" data-live-search="true" onChange={(e) => lidFun.changeLid(lid.id, e.target.value)}>
+                <select name="lid" className="selectpicker search-box w-100" data-live-search="true" onChange={(e) => lidFun.changeLid(lid.id, e.target.value)} ref={lidSelectRef}>
                     <option value="none">Seleccionar tapa</option>
                     { lids.map((l, i) => 
-                        <option key={i} value={JSON.stringify(l)}>{l.name}</option>
+                        <option key={i} value={l.id}>{l.name}</option>
                     )}
                 </select>
                 {
@@ -47,7 +58,7 @@ const LidForm = ({lid}: LidFormProps) => {
                         <option value="lab">Laboratorio</option>
                     </select>
                 }
-                <input type="number" placeholder="Cantidad" onChange={(e) => lidFun.changeLidQuantity(lid.id, e.target.value)}/>
+                <input type="number" placeholder="Cantidad" onChange={(e) => lidFun.changeLidQuantity(lid.id, e.target.value)} value={lid.quantity}/>
                 <select name="priceBy" onChange={(e) => lidFun.changePriceBy(lid.id, e.target.value)} value={lid.priceBy} id="" className="small">
                     <option value="unit">Unidad</option>
                     <option value="dozen">Docena</option>

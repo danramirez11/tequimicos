@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { PriceBy, Receipt, ReceiptChemical, ReceiptContainer, ReceiptContOnly, ReceiptLid, ReceiptMisc, Spout } from "../types/products";
-import { Client, CombinationLid } from "../types/firebase";
+import { Client, Combination, CombinationLid, Lid } from "../types/firebase";
 import { useEffect } from "react";
 import { addClienttoFirestore } from "../services/firestore";
 import { useSelector } from "react-redux";
@@ -84,6 +84,9 @@ const useForm = () => {
     const [ activeReceipt, setActiveReceipt ] = useState<string | null>(null)
 
     const { clients } = useSelector((state: StoreType) => state.clients)
+
+    const combinations = useSelector((state: StoreType) => state.combinations.combinations)
+    const lids = useSelector((state: StoreType) => state.lids.lids)
 
     console.log(receipt)
 
@@ -521,7 +524,7 @@ const useForm = () => {
 
     const containerFun = {
         changeContainer: (containerId: string, container: string) => {
-            const chosenContainer = JSON.parse(container)
+            const chosenContainer = combinations.find((c) => c.id === container) as Combination;
             setChosenProducts((p: any) => ([...p, chosenContainer]))
             setReceipt((p: Receipt) => ({
                 ...p,
@@ -938,7 +941,7 @@ const useForm = () => {
 
     const lidFun = {
         changeLid: (lidId: string, lid: string) => {
-            const chosenLid = JSON.parse(lid)
+            const chosenLid = lids.find((l) => l.id === lid) as Lid;
             setChosenProducts((p: any) => ([...p, chosenLid]))
             setReceipt((p: Receipt) => ({
                 ...p,
@@ -1218,7 +1221,7 @@ const useForm = () => {
 
     const containerOnlyFun = {
         changeContainer: (containerId: string, container: string) => {
-            const chosenContainer = JSON.parse(container)
+            const chosenContainer = combinations.find((c) => c.id === container) as Combination;
             setChosenProducts((p: any) => ([...p, chosenContainer]))
             setReceipt((p: Receipt) => ({
                 ...p,

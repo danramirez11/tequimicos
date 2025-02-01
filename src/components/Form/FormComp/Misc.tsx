@@ -12,10 +12,14 @@ const MiscForm = ({product}: MiscFormProps) => {
 
     return (
         <section className="selling-form-product">
-            <div className="flex">
+            <div className="flex misc-product">
                 <input type="text" placeholder="Nombre" value={product.name} onChange={(e) => miscFun.changeName(product.id, e.target.value)}/>
-                <input type="number" placeholder="Cantidad" onChange={(e) => miscFun.changeQuantity(product.id, e.target.value)}/>
-                <input type="number" placeholder="Precio unidad" onChange={(e) => miscFun.changePrice(product.id, e.target.value)}/>
+
+                <label htmlFor="quantity">Cantidad</label>
+                <input className="small" type="number" placeholder="Cantidad" onChange={(e) => miscFun.changeQuantity(product.id, e.target.value)} name="quantity" value={product.quantity}/>
+                <label htmlFor="unitprice">Precio unidad</label>
+                
+                <input className="small" type="number" placeholder="Precio unidad" onChange={(e) => miscFun.changePrice(product.id, e.target.value)} name="unitprice" value={product.priceUnit}/>
                 <button className="red-simple" type="button" onClick={() => handleDeleteProduct(product.id)}>X</button>
             </div>
 
