@@ -31,3 +31,9 @@
     border: var(--blue) 2px solid;
     border-radius: 15px;
 }
+
+@media print {
+    .receipts-small{
+        display: none;
+    }
+}

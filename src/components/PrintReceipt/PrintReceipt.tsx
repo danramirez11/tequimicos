@@ -40,6 +40,17 @@ const PrintReceipt = () => {
                                                     )
                                                 })
                                             }
+                                            {
+                                                l.lazo ? 
+                                                l.lazo.map((lazo) => {
+                                                    return (
+                                                        <div className="indent" key={lazo.name}>
+                                                            <p>Lazos:</p>
+                                                            <p>{lazo.quantity} {lazo.name}</p>
+                                                        </div>
+                                                    )
+                                                }) : ''
+                                            }
                                         </div>
                                     )
                                 })
@@ -63,8 +74,22 @@ const PrintReceipt = () => {
                             <p className="price">$ {p.price}</p>
                         </div>
                     )
+                } else if (p.type === 'containerOnly') {
+                    return (
+                        <div key={p.id}>
+                            <p><b>{p.quantity}</b> {p.name}</p>
+                            <p className="price">$ {p.price}</p>
+                        </div>
+                    )
+                } else if (p.type === 'misc') {
+                    return (
+                        <div key={p.id}>
+                            <p><b>{p.quantity}</b> {p.name}</p>
+                            <p className="price">$ {p.price}</p>
+                        </div>
+                    )
                 } else {
-                    return <p>nothing here</p>
+                    return <p key={p.id}>ocurrió un error</p>
                 }
             })}
 
