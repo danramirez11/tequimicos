@@ -35,8 +35,15 @@ const receiptSlice = createSlice({
     name: "receipt",
     initialState,
     reducers: {
-        updateReceipts: (state, action) => {
-          state.receipts = action.payload
+        addReceipt: (state, action) => {
+            state.receipts.push(action.payload)
+        },
+        modifyReceipt: (state, action) => {
+            const index = state.receipts.findIndex((r) => r.id === action.payload.id)
+            state.receipts[index] = action.payload
+        },
+        removeReceipt: (state, action) => {
+            state.receipts = state.receipts.filter((r) => r.id !== action.payload)
         }
       },
     extraReducers: (builder) => {
@@ -56,6 +63,6 @@ const receiptSlice = createSlice({
     },
 });
 
-export const { updateReceipts } = receiptSlice.actions;
+export const { addReceipt, modifyReceipt, removeReceipt } = receiptSlice.actions;
 
 export default receiptSlice.reducer;

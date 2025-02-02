@@ -7,6 +7,7 @@ import { fetchLidData } from "./store/slices/lidSlice";
 import { fetchClientData, updateClients } from "./store/slices/clientSlice";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./services/firebaseConfig";
+import { addReceipt, modifyReceipt, removeReceipt } from './store/slices/receiptSlice'
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -38,6 +39,29 @@ const App = () => {
         // Clean up the listener when the component unmounts
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        const collectionRef = collection(db, 'receipts')
+
+        const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    console.log('New receipt: ', change.doc.data());
+                    dispatch(addReceipt(change.doc.data()));
+                }
+                if (change.type === 'modified') {
+                    console.log('Modified receipt: ', change.doc.data());
+                    dispatch(modifyReceipt(change.doc.data()));
+                }
+                if (change.type === 'removed') {
+                    console.log('Removed receipt: ', change.doc.data());
+                    dispatch(removeReceipt(change.doc.data()));
+                }
+            });
+        });
+
+        return () => unsubscribe();
+    }, [])
 
     const colors = [
         {
@@ -387,21 +411,28 @@ const App = () => {
         }
     ]
 
+    console.log('Tapas que no tienen el número de paca:')
+
     lids.forEach(lid => {
         if (lid.colors && Object.prototype.hasOwnProperty.call(lid.colors, 'none')) {
             //console.log(`${lid.name} no tiene colores`, lid.id)
         } 
 
         if (lid.pack === 0){
-            console.log(`${lid.name} no tiene pack`, lid.id)
+            console.log(`${lid.name}`)
         }
     })
+
+    
+    console.log('-------------------------')
+
+    console.log('Tapas que no tienen precios individuales:')
 
     lids.forEach(lid => {
         const lidFound = excelLids.find(lidExcel => lidExcel.Tapa.trim() === lid.name);
 
         if (!lidFound) {
-            console.log(`${lid.name} no tiene precios solos`);
+            console.log(`${lid.name}`);
         }
     })
 
