@@ -1,0 +1,18 @@
+p.error{
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.price{
+    font-weight: bold;
+    text-align: right;
+    padding: 12px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+h5.price{
+    color: var(--gray);
+}

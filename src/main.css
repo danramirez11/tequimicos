@@ -1,3 +1,42 @@
 body{
-    font-family: 'Arial'
+    font-family: 'Arial';
+    margin: 0;
+    padding: 0;
+}
+
+#root{
+    display: flex;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+:root {
+    --black: #1E1E1E;
+    --brand-blue: #142C76;
+    --brand-green: #C3D11A;
+    --blue: #2970E9;
+    --green: #29C86F;
+    --red: #ED5A5A;
+    --gray: #1e1e1e80;
+    --yellow: #F2C94C;
+    
+}
+
+.page{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    margin-left: 10vw;
+    width: 100%;
+}
+
+.indentation{
+    margin-left: 20px;
+}
+
+.flex{
+    display: flex;
+    gap: 5px;
 }

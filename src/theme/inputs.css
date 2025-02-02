@@ -1,0 +1,44 @@
+select{
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+    background-color: #f9f9f9;
+    color: var(--black);
+    outline: none;
+    transition: all 0.3s;
+}
+
+select.simple{
+    background-color: transparent;
+    width: 50%;
+}
+
+select.small{
+    width: 20%;
+    background-color: var(--brand-blue);
+    color: white;
+}
+
+input{
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    color: var(--black);
+    outline: none;
+    border-bottom: var(--gray) 2px solid;
+    transition: all 0.3s;
+}
+
+input:focus{
+    border-bottom: var(--blue) 2px solid;
+}
+
+input.opacity{
+    color: var(--gray);
+}
+
+button.dropdown-toggle{
+    width: 100%;
+}
+
