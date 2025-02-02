@@ -485,11 +485,11 @@ const useForm = () => {
         setReceipt((p: Receipt) => ({...p, products: p.products.filter((product) => product.id !== id)}))
     }
 
-    const reset = () => {
+    /*const reset = () => {
         setReceipt({...emptyReceipt})
         setFinishErrors([' '])
         setChosenProducts([])
-    }
+    }*/
 
     const clientFun = {
 
