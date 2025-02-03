@@ -67,7 +67,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                     
                     <div key={l.id} className="selling-lid-container">
                         <div className="flex">
-                        <select onChange={(e) => containerFun.changeLid(container.id, l.id, e.target.value)} name="lid" value={JSON.stringify({ name: l.name, id: l.productId})}>
+                        <select onChange={(e) => containerFun.changeLid(container.id, l.id, e.target.value)} name="lid" value={JSON.stringify({ name: l.name, id: l.productId})} className="mid">
                             <option value="none">Sin tapa</option>
                             { combinations.find(c => c.name === container.name)!.lids.map((lid) => 
                                 <option key={lid.id} value={JSON.stringify({ name: lid.name, id: lid.id})}>{lid.name}</option>

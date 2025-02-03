@@ -14,6 +14,10 @@ select.simple{
     width: 50%;
 }
 
+select.mid{
+    width: 70%;
+}
+
 select.small{
     width: 20%;
     background-color: var(--brand-blue);

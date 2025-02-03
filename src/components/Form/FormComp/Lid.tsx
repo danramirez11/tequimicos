@@ -48,7 +48,7 @@ const LidForm = ({lid}: LidFormProps) => {
                 <select name="lid" className="selectpicker search-box w-100" data-live-search="true" onChange={(e) => lidFun.changeLid(lid.id, e.target.value)} ref={lidSelectRef}>
                     <option value="none">Seleccionar tapa</option>
                     { lids.map((l, i) => 
-                        <option key={i} value={l.id}>{l.name}</option>
+                        l.canBeSellAlone !== false && <option key={i} value={l.id}>{l.name}</option>
                     )}
                 </select>
                 {
