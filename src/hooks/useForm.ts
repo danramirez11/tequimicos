@@ -104,6 +104,8 @@ const useForm = () => {
     }, [receipt])
 
     useEffect(() => {
+        setFinishErrors([' '])
+        
         if (activeReceipt) {
             setReceipt(allReceipts.find((r) => r.id === activeReceipt) as Receipt)
         } else {
