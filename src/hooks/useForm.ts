@@ -247,7 +247,7 @@ const useForm = () => {
                 }
             })
 
-            if (prev.client === '') {
+            if (prev.client === '' || prev.client === 'Sin nombre' || prev.client === 'none' || prev.client === 'add') {
                 errors.push('Falta seleccionar cliente');
             }
 

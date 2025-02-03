@@ -15,13 +15,17 @@ select.simple{
 }
 
 select.mid{
-    width: 70%;
+    width: 50%;
 }
 
 select.small{
     width: 20%;
     background-color: var(--brand-blue);
     color: white;
+}
+
+select.spout{
+    width: 20%;
 }
 
 input{
