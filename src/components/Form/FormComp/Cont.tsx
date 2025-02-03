@@ -59,8 +59,8 @@ const ContainerForm = ({container}: ContainerProps) => {
 
             <button className="red-simple" type="button" onClick={() => handleDeleteProduct(container.id)}>X</button>
             </div>
-            
 
+         
             <div className="indentation">
             { container.name !== 'none' && container.lids.map((l) => {
                 return (

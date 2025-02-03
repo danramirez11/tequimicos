@@ -3,7 +3,7 @@ import { useState } from "react";
 import { PriceBy, Receipt, ReceiptChemical, ReceiptContainer, ReceiptContOnly, ReceiptLid, ReceiptMisc, Spout } from "../types/products";
 import { Client, Combination, CombinationLid, Lid } from "../types/firebase";
 import { useEffect } from "react";
-import { addClienttoFirestore } from "../services/firestore";
+import { addClienttoFirestore, addReceiptToFirestore } from "../services/firestore";
 import { useSelector } from "react-redux";
 import { StoreType } from "../store/store";
 
@@ -98,14 +98,6 @@ const useForm = () => {
 
         handleReceiptChange();
     }, [receipt.products]);
-
-    useEffect(() => {
-        if (finishErrors.length === 0) {
-            setReceipt((p: Receipt) => ({...p, isFinished: true, date: new Date().toLocaleDateString(), hour: new Date().toLocaleTimeString()}))
-            print();
-            setFinishErrors([' '])
-        }
-    }, [finishErrors])
 
     useEffect(() => {
         setAllReceipts((p: Receipt[]) => p.map((r) => r.id === receipt.id ? receipt : r))
@@ -273,10 +265,52 @@ const useForm = () => {
                 setFinishErrors(errors);
             } else {
                 setFinishErrors([]);
+                setReceipt((p: Receipt) => ({...p, isFinished: true, date: new Date().toLocaleDateString(), hour: new Date().toLocaleTimeString()}))
+                printAndUpload();
             }
 
             return prev;
         })
+    }
+
+    const printAndUpload = () => {
+        print();
+
+        setReceipt((p) => {
+
+            const updatedProducts = p.products.map((product) => {
+                if (product.type === 'container') {
+                    return {
+                        ...product,
+                        lids: product.lids.map((lid) => {
+                            return {
+                                ...lid,
+                                lazo: lid.lazo ? lid.lazo : null,
+                                spout: lid.spout ? lid.spout : null,
+                            }
+                        })
+                    }
+                } else if (product.type === 'lid') {
+                    return {
+                        ...product,
+                        lazo: product.lazo ? product.lazo : null,
+                        spout: product.spout ? product.spout : null,
+                    }
+                } else {
+                    return product
+                }
+            });
+
+            addReceiptToFirestore({...p, products: updatedProducts});
+
+            return p;
+        })
+
+        setAllReceipts((prevReceipts) => {
+            const updatedReceipts = prevReceipts.filter((r) => r.id !== receipt.id);
+            setActiveReceipt(updatedReceipts.length > 0 ? updatedReceipts[0].id : null);
+            return updatedReceipts;
+        });
     }
 
     const checkAvailableLids = (containerId: string) => {

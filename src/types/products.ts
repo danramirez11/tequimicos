@@ -35,9 +35,9 @@ export type ReceiptLid = {
     price: number;
     quantity: number;
     colors: Color[];
-    spout?: Spout;
+    spout?: Spout | null;
     pack?: number;
-    lazo?: Color[];
+    lazo?: Color[] | null;
 }
 
 type Color = {
