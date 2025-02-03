@@ -19,7 +19,7 @@ import MiscForm from "./FormComp/Misc";
 const Form = () => {
     const formContext = useContext(FormContext);
     
-    const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, finishErrors, clientFun, clientErrors } = formContext!;
+    const { receipt, handleMiscChange, handleIsDelivery, handleFinish, handleAddProduct, finishErrors, clientFun, clientErrors, receiptFun } = formContext!;
     
     const { clients } = useSelector((state: StoreType) => state.clients)
 
@@ -57,6 +57,7 @@ const Form = () => {
                 )}
             </select>
             <h5>Cliente: {receipt.client}</h5>
+            <button className="red form-delete-btn" type="button" onClick={() => receiptFun.deleteReceipt(receipt.id)}>X</button>
             </div>
 
             {
