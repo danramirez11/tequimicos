@@ -7,6 +7,7 @@ import { fetchLidData } from "./store/slices/lidSlice";
 import { fetchClientData, updateClients } from "./store/slices/clientSlice";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./services/firebaseConfig";
+import { FormProvider } from "./context/formContext";
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -43,7 +44,9 @@ const App = () => {
     }
 
     return (
+        <FormProvider>
         <AppRouter/>
+        </FormProvider>
     );
 }
 
