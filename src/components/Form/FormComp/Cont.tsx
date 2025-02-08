@@ -53,7 +53,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                 )}
             </select>
 
-            <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)} value={container.quantity}/>
+            <input type="number" min={0} placeholder="Cantidad" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)} value={container.quantity}/>
 
 
 
@@ -79,7 +79,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                                 <option value="lab">Laboratorio</option>
                             </select>
                         }
-                        <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)} value={l.quantity}/>
+                        <input type="number" min={0} placeholder="Cantidad" onChange={(e) => containerFun.changeLidQuantity(container.id, l.id, e.target.value)} value={l.quantity}/>
                         <select name="priceBy" className="small" onChange={(e) => containerFun.changePriceByLid(container.id, l.id, e.target.value)} value={l.priceBy}>
                             <option value="unit">Unidad</option>
                             <option value="dozen">Docena</option>
@@ -102,7 +102,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                                                 ))
                                             }
                                         </select>
-                                        <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'quantity', e.target.value)} value={color.quantity} className="opacity"/>
+                                        <input type="number" min={0} placeholder="Cantidad" onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'quantity', e.target.value)} value={color.quantity} className="opacity"/>
                                         <button type="button" className="red-simple" onClick={() => containerFun.deleteLidColor(container.id, l.id, color.name)}>X</button>
                                     </div>
                                 )
@@ -123,7 +123,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                                                     ))
                                                 }
                                             </select>
-                                            <input type="number" placeholder="Cantidad" onChange={(e) => containerFun.changeLazo(container.id, l.id, lazo.name, 'quantity', e.target.value)} value={lazo.quantity} className="opacity"/>
+                                            <input type="number" min={0} placeholder="Cantidad" onChange={(e) => containerFun.changeLazo(container.id, l.id, lazo.name, 'quantity', e.target.value)} value={lazo.quantity} className="opacity"/>
                                             <button type="button" className="red-simple" onClick={() => containerFun.deleteLazo(container.id, l.id, lazo.name)}>X</button>
                                         </div>
                                     )
@@ -151,7 +151,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                             <h5 className="price">$ {l.price}</h5>
                             {
                                 customPrices.includes(l.id) ?
-                                <input type="number" placeholder="Precio unidad" onChange={(e) => containerFun.changeLidUnitPrice(container.id, l.id, e.target.value)} value={l.price > 0 && l.quantity > 0 ? l.price / l.quantity : 0}/>
+                                <input type="number" min={0} placeholder="Precio unidad" onChange={(e) => containerFun.changeLidUnitPrice(container.id, l.id, e.target.value)} value={l.price > 0 && l.quantity > 0 ? l.price / l.quantity : 0}/>
                                 :
                                 <h5 className="price"> ( {l.price > 0 && l.quantity > 0 ? l.price / l.quantity : ''} )</h5>
                             }

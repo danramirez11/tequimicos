@@ -58,7 +58,7 @@ const LidForm = ({lid}: LidFormProps) => {
                         <option value="lab">Laboratorio</option>
                     </select>
                 }
-                <input type="number" placeholder="Cantidad" onChange={(e) => lidFun.changeLidQuantity(lid.id, e.target.value)} value={lid.quantity}/>
+                <input type="number" min={0} placeholder="Cantidad" onChange={(e) => lidFun.changeLidQuantity(lid.id, e.target.value)} value={lid.quantity}/>
                 <select name="priceBy" onChange={(e) => lidFun.changePriceBy(lid.id, e.target.value)} value={lid.priceBy} id="" className="small">
                     <option value="unit">Unidad</option>
                     <option value="dozen">Docena</option>
@@ -79,7 +79,7 @@ const LidForm = ({lid}: LidFormProps) => {
                                     <option key={color} value={color}>{color}</option>)
                             }
                         </select>
-                        <input type="number" placeholder="Cantidad" value={c.quantity} onChange={(e) => lidFun.changeLidColor(lid.id, c.name, 'quantity', e.target.value)}/>
+                        <input type="number" min={0} placeholder="Cantidad" value={c.quantity} onChange={(e) => lidFun.changeLidColor(lid.id, c.name, 'quantity', e.target.value)}/>
                         <button className="red-simple" type="button" onClick={() => lidFun.deleteColor(lid.id, c.name)}>X</button>
                     </div>
                 )
@@ -99,7 +99,7 @@ const LidForm = ({lid}: LidFormProps) => {
                                                 <option key={color} value={color}>lazo: {color}</option>)
                                         }
                                     </select>
-                                    <input type="number" placeholder="Cantidad" value={l.quantity} onChange={(e) => lidFun.changeLidLazo(lid.id, l.name, 'quantity', e.target.value)}/>
+                                    <input type="number" min={0} placeholder="Cantidad" value={l.quantity} onChange={(e) => lidFun.changeLidLazo(lid.id, l.name, 'quantity', e.target.value)}/>
                                     <button className="red-simple" type="button" onClick={() => lidFun.deleteLazo(lid.id, l.name)}>X</button>
                                 </div>
                             )
@@ -130,7 +130,7 @@ const LidForm = ({lid}: LidFormProps) => {
                 <button className="yellow-simple" onClick={() => handleCustomPrice()} type="button"><FaExchangeAlt/></button>
                 {
                     isCustomPrice ?
-                    <input type="number" placeholder="Precio unidad" onChange={(e) => lidFun.changeUnitPrice(lid.id, e.target.value)} value={lid.price > 0 && lid.quantity > 0 ? lid.price / lid.quantity : 0}/>
+                    <input type="number" min={0} placeholder="Precio unidad" onChange={(e) => lidFun.changeUnitPrice(lid.id, e.target.value)} value={lid.price > 0 && lid.quantity > 0 ? lid.price / lid.quantity : 0}/>
                     :
                     <h5 className="price">{lid.price > 0 && lid.quantity > 0 ? lid.price / lid.quantity : ''}</h5>
                 }

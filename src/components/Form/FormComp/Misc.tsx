@@ -19,7 +19,7 @@ const MiscForm = ({product}: MiscFormProps) => {
                 <input className="small" type="number" placeholder="Cantidad" onChange={(e) => miscFun.changeQuantity(product.id, e.target.value)} name="quantity" value={product.quantity}/>
                 <label htmlFor="unitprice">Precio unidad</label>
                 
-                <input className="small" type="number" placeholder="Precio unidad" onChange={(e) => miscFun.changePrice(product.id, e.target.value)} name="unitprice" value={product.priceUnit}/>
+                <input className="small" type="number" min={0} placeholder="Precio unidad" onChange={(e) => miscFun.changePrice(product.id, e.target.value)} name="unitprice" value={product.priceUnit}/>
                 <button className="red-simple" type="button" onClick={() => handleDeleteProduct(product.id)}>X</button>
             </div>
 
