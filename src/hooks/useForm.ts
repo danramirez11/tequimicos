@@ -525,12 +525,6 @@ const useForm = () => {
         setReceipt((p: Receipt) => ({...p, products: p.products.filter((product) => product.id !== id)}))
     }
 
-    /*const reset = () => {
-        setReceipt({...emptyReceipt})
-        setFinishErrors([' '])
-        setChosenProducts([])
-    }*/
-
     const clientFun = {
 
         addClientInfo: (key: string, value: string) => {
@@ -583,7 +577,7 @@ const useForm = () => {
 
         changeContainerQuantity: (containerId: string, quantityString: string) => {
 
-            const quantity = Number(quantityString)
+            const quantity = Number(quantityString.replace(/[^0-9]/g, ""));
             
             setReceipt((p: Receipt) => ({
                 ...p,
@@ -619,6 +613,8 @@ const useForm = () => {
             }
 
             updatePriceByContainer(containerId);
+
+        
         },
 
         changeLid: (containerId: string, lidId: string, lid: any) => {
@@ -701,7 +697,7 @@ const useForm = () => {
 
         },
 
-        changeLidColor: (containerId: string, lidId: string, color: string, key: string, value: string | number) => {
+        changeLidColor: (containerId: string, lidId: string, color: string, key: string, value: string) => {
 
             setReceipt((p: Receipt) => ({
                 ...p,
@@ -715,7 +711,7 @@ const useForm = () => {
                                         ...lid,
                                         colors: lid.colors.map((c) => {
                                             if (c.name === color) {
-                                                return {...c, [key]: key === 'quantity' ? Number(value) : value}
+                                                return {...c, [key]: key === 'quantity' ? Number(value.replace(/[^0-9]/g, "")) : value}
                                             } else {
                                                 return c
                                             }
@@ -872,7 +868,7 @@ const useForm = () => {
         },
 
         changeLidUnitPrice: (containerId: string, lidId: string, priceString: string) => {
-            const priceUnit = Number(priceString)
+            const priceUnit = Number(priceString.replace(/[^0-9]/g, ""));
             setReceipt((p: Receipt) => ({
 
                 ...p,
@@ -909,7 +905,7 @@ const useForm = () => {
                                         ...lid,
                                         lazo: lid.lazo?.map((l) => {
                                             if (l.name === name) {
-                                                return {...l, [key]: key === 'quantity' ? Number(value) : value}
+                                                return {...l, [key]: key === 'quantity' ? Number(value.replace(/[^0-9]/g, "")) : value}
                                             } else {
                                                 return l
                                             }
@@ -998,7 +994,7 @@ const useForm = () => {
         },
 
         changeLidQuantity: (lidId: string, quantityString: string) => {
-            const quantity = Number(quantityString)
+            const quantity = Number(quantityString.replace(/[^0-9]/g, ""));
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -1012,7 +1008,7 @@ const useForm = () => {
             updateLidPrice(lidId);
         },
 
-        changeLidColor: (lidId: string, color: string, key: string, value: string | number) => {
+        changeLidColor: (lidId: string, color: string, key: string, value: string) => {
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -1021,7 +1017,7 @@ const useForm = () => {
                             ...product,
                             colors: product.colors.map((c) => {
                                 if (c.name === color) {
-                                    return {...c, [key]: key === 'quantity' ? Number(value) : value}
+                                    return {...c, [key]: key === 'quantity' ? Number(value.replace(/[^0-9]/g, "")) : value}
                                 } else {
                                     return c
                                 }
@@ -1095,7 +1091,7 @@ const useForm = () => {
         },
 
         changeUnitPrice: (lidId: string, priceString: string) => {
-            const priceUnit = Number(priceString)
+            const priceUnit = Number(priceString.replace(/[^0-9]/g, ""));
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -1116,7 +1112,7 @@ const useForm = () => {
                             ...product,
                             lazo: product.lazo?.map((l) => {
                                 if (l.name === name) {
-                                    return {...l, [key]: key === 'quantity' ? Number(value) : value}
+                                    return {...l, [key]: key === 'quantity' ? Number(value.replace(/[^0-9]/g, "")) : value}
                                 } else {
                                     return l
                                 }
@@ -1179,7 +1175,7 @@ const useForm = () => {
         },
 
         changeQuantity: (miscId: string, quantityString: string) => {
-            const quantity = Number(quantityString)
+            const quantity = Number(quantityString.replace(/[^0-9]/g, ""));
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -1193,7 +1189,7 @@ const useForm = () => {
         },
 
         changePrice: (miscId: string, priceString: string) => {
-            const priceUnit = Number(priceString)
+            const priceUnit = Number(priceString.replace(/[^0-9]/g, ""));
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -1278,7 +1274,7 @@ const useForm = () => {
         },
 
         changeQuantity: (containerId: string, quantityString: string) => {
-            const quantity = Number(quantityString)
+            const quantity = Number(quantityString.replace(/[^0-9]/g, ""));
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
@@ -1308,7 +1304,7 @@ const useForm = () => {
         },
 
         changeUnitPrice: (containerId: string, priceString: string) => {
-            const priceUnit = Number(priceString)
+            const priceUnit = Number(priceString.replace(/[^0-9]/g, ""));
             setReceipt((p: Receipt) => ({
                 ...p,
                 products: p.products.map((product) => {
