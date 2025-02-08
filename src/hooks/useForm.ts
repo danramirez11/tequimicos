@@ -201,6 +201,10 @@ const useForm = () => {
                                 errors.push(`La cantidad de tapas y lazos no coincide en ${product.name} - ${lid.name}`);
                             }
                         }
+
+                        if (lid.colors.some((c) => c.name === 'none' ||  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(c.name))) {
+                            errors.push(`Falta seleccionar colores en ${product.name} - ${lid.name}`);
+                        }
                     })
                 } else if ( product.type === 'lid') {
                     if (product.name === 'none') {
