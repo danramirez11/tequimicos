@@ -15,7 +15,7 @@ const ReceiptHis = ({receipt}: ReceiptHisProps) => {
     const productNames = receipt.products.map(p => p.name).join(', ');
 
     return (
-        <section className={`receipt-his ${isActive ? 'active' : ''}`} onClick={() => setIsActive(!isActive)}>
+        <section className={`receipt-his ${isActive ? 'his-active' : ''}`} onClick={() => setIsActive(!isActive)}>
             <h4>{receipt.client}</h4>
             
             {

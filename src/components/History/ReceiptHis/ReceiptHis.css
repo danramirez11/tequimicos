@@ -6,6 +6,11 @@
     padding: 10px;
 }
 
+.his-active{
+    border: var(--blue) 2px solid;
+    border-radius: 15px;
+}
+
 .receipt-his-info{
     display: grid;
     grid-template-columns: 50% repeat(auto-fit, minmax(0, 1fr));
