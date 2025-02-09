@@ -1,3 +1,4 @@
+ 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, StoreType } from "../../store/store";
@@ -13,12 +14,10 @@ const HistoryPage = () => {
         dispatch(fetchReceiptsData())
     }, [])
 
-    console.log(loading)
-
     return (
         <section className="page history-page">
             <h1>Historial</h1>
-        
+
             { loading && <p>Trayendo los datos...</p> }
 
             <section className="history-receipts">

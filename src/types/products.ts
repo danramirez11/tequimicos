@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type Receipt = {
     id: string;
     client: string;
@@ -9,6 +11,7 @@ export type Receipt = {
     payment: string;
     isDelivery: boolean;
     isFinished: boolean;
+    timestamp?: Timestamp;
 }
 
 export type PriceBy = 'unit' | 'dozen' | 'hundred' | 'pack';
