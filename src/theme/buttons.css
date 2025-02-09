@@ -59,6 +59,16 @@ button.outline:hover{
     color: white;
 }
 
+/*RED*/
+
+button.red{
+    background-color: var(--red);
+}
+
+button.red:hover{
+    background-color: var(--black);
+}
+
 /*RED SIMPLE*/
 
 button.red-simple{

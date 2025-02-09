@@ -20,6 +20,8 @@
         width: 100%;
         min-width: 0;
     }
+
+    
 }
 
 .receipt-his-products{
@@ -28,4 +30,18 @@
     text-overflow: ellipsis;
     width: 100%;
     min-width: 0;
+
+    p{
+        margin: 0;
+    }
+
+    div.indent{
+        padding-left: 20px;
+    }
+}
+
+.receipt-his-buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
