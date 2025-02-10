@@ -7,9 +7,10 @@ import { FaTrash } from "react-icons/fa";
 
 type ReceiptHisProps = {
     receipt: Receipt;
+    onPrint: (receipt: Receipt) => void;
 }
 
-const ReceiptHis = ({receipt}: ReceiptHisProps) => {
+const ReceiptHis = ({receipt, onPrint}: ReceiptHisProps) => {
     const [ isActive, setIsActive ] = useState<boolean>(false);
 
     const easilyReadDate = formatDate(receipt.date, receipt.timestamp);
@@ -94,7 +95,10 @@ const ReceiptHis = ({receipt}: ReceiptHisProps) => {
                     <p>{receipt.isDelivery ? 'Domicilio' : 'Punto de venta'}</p>
                     <p><b>${receipt.total}</b></p>
                     <div className="receipt-his-buttons">
-                    <button className="blue"><FaPrint/></button>
+                    <button className="blue" onClick={(e) => {
+                        e.stopPropagation();
+                        onPrint(receipt);
+                    }}><FaPrint/></button>
                     <button className="red"><FaTrash/></button>
                 </div>
                 </div> 
@@ -108,7 +112,10 @@ const ReceiptHis = ({receipt}: ReceiptHisProps) => {
                     <p>{easilyReadDate}</p>
                     <p>{receipt.isDelivery ? 'Domicilio' : 'Punto de venta'}</p>
                     <p><b>${receipt.total}</b></p>
-                    <button className="blue"><FaPrint/></button>
+                    <button className="blue"><FaPrint onClick={(e) => {
+                        e.stopPropagation();
+                        onPrint(receipt);
+                    }}/></button>
                 </div>
             }
         </section>

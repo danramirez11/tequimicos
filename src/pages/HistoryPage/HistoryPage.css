@@ -4,3 +4,15 @@
     width: 100%;
     gap: 20px;
 }
+
+@media print {
+    .history-page{
+        h1{
+            display: none;
+        }
+
+        .history-receipts{
+            display: 0;
+        }
+    }
+}
