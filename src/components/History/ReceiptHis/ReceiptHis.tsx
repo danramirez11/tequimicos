@@ -3,7 +3,7 @@ import { Receipt } from "../../../types/products";
 import './ReceiptHis.css'
 import { formatDate } from "../../../utils/functions";
 import { FaPrint } from "react-icons/fa6"; 
-import { FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 type ReceiptHisProps = {
     receipt: Receipt;
@@ -99,7 +99,8 @@ const ReceiptHis = ({receipt, onPrint}: ReceiptHisProps) => {
                         e.stopPropagation();
                         onPrint(receipt);
                     }}><FaPrint/></button>
-                    <button className="red"><FaTrash/></button>
+                    <button className="blue" disabled><FaEdit/></button>
+                    <button className="red" disabled><FaTrash/></button>
                 </div>
                 </div> 
                 

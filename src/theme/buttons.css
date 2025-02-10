@@ -69,6 +69,10 @@ button.red:hover{
     background-color: var(--black);
 }
 
+button.red:disabled{
+    background-color: #b6bdb7;
+}
+
 /*RED SIMPLE*/
 
 button.red-simple{
