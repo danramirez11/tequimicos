@@ -49,7 +49,7 @@ const ContOnlyForm = ({container}: ContOnlyFormProps) => {
                         <option key={c.id} value={c.id}>{c.name}</option>
                     )}
                 </select>
-                <input type="number" placeholder="Cantidad" onChange={(e) => containerOnlyFun.changeQuantity(container.id, e.target.value)} value={container.quantity}/>
+                <input type="number" min={0} placeholder="Cantidad" onChange={(e) => containerOnlyFun.changeQuantity(container.id, e.target.value)} value={container.quantity}/>
                 <select name="priceBy" value={container.priceBy} onChange={(e) => containerOnlyFun.changePriceBy(container.id, e.target.value)} className="small">
                     <option value="unit">Unidad</option>
                     <option value="dozen">Docena</option>
@@ -73,7 +73,7 @@ const ContOnlyForm = ({container}: ContOnlyFormProps) => {
 
                 {
                     isCustomPrice ?
-                    <input type="number" placeholder="Precio unidad" onChange={(e) => containerOnlyFun.changeUnitPrice(container.id, e.target.value)} value={container.price > 0 && container.quantity > 0 ? container.price / container.quantity : 0}/>
+                    <input type="number" min={0} placeholder="Precio unidad" onChange={(e) => containerOnlyFun.changeUnitPrice(container.id, e.target.value)} value={container.price > 0 && container.quantity > 0 ? container.price / container.quantity : 0}/>
                     :
                     <h5 className="price"> {container.price > 0 && container.quantity > 0 ? container.price / container.quantity : ''}</h5>
                 }

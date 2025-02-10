@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import { Receipt } from "../../types/products";
 
@@ -19,7 +19,13 @@ export const fetchReceiptsData =createAsyncThunk(
     'firebase/fetchReceiptsData',
     async (_, {rejectWithValue}) => {
         try {
-            const querySnapshot = await getDocs(collection(db, 'receipts'))
+            const receiptsCollection = collection(db, 'receipts')
+            const q = query(
+                receiptsCollection,
+                orderBy('timestamp', 'desc'),
+                limit(30)
+            )
+            const querySnapshot = await getDocs(q)
             const data: Receipt[] = []
             querySnapshot.forEach((doc) => {
                 data.push({...doc.data() as Receipt})

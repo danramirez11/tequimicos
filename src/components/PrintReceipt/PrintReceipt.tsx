@@ -1,14 +1,23 @@
 import { useContext } from "react";
 import { FormContext } from "../../context/formContext";
 import './PrintReceipt.css'
+import { formatDate } from "../../utils/functions";
+import { Receipt } from "../../types/products";
 
-const PrintReceipt = () => {
+type PrintReceiptProps = {
+    historyReceipt?: Receipt;
+}
+
+const PrintReceipt = ({historyReceipt}: PrintReceiptProps) => {
         const formContext = useContext(FormContext);
-        const { receipt } = formContext!;
+        const receipt = historyReceipt || formContext!.receipt;
+        const readableDate = formatDate(receipt.date, receipt.timestamp);
 
     return (
         <section className="print-receipt">
             <p>Orden de pedido</p>
+
+            { receipt.timestamp && <p>{readableDate}</p> }
 
             <p>{receipt.isDelivery ? 'Domicilio' : 'Punto de venta'}</p>
 

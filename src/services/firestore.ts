@@ -1,7 +1,7 @@
 import { Client } from "../types/firebase";
 import { Receipt } from "../types/products";
 import { db } from "./firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 export const addClienttoFirestore = async (client: Client) => {
     try {
@@ -19,8 +19,14 @@ export const addClienttoFirestore = async (client: Client) => {
 export const addReceiptToFirestore = async (receipt: Receipt) => {
     try {
         console.log('Receipt being saved:', receipt);
+
+        const receiptWithTimestamp = {
+            ...receipt,
+            timestamp: serverTimestamp()
+        }
+
         const receiptDoc = doc(db, 'receipts', receipt.id);
-        await setDoc(receiptDoc, receipt);
+        await setDoc(receiptDoc, receiptWithTimestamp);
 
         console.log('Receipt added to Firestore');
     } catch (error) {
