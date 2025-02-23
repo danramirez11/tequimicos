@@ -118,7 +118,7 @@ const useForm = () => {
     const receiptFun = {
         addReceipt: () => {
             const newReceiptId = crypto.randomUUID();
-            setAllReceipts((p: Receipt[]) => ([...p, {...emptyReceipt, id: newReceiptId}]))
+            setAllReceipts((p: Receipt[]) => ([...p, {...emptyReceipt, id: newReceiptId, date: new Date().toLocaleDateString(), hour: new Date().toLocaleTimeString()}]))
             setActiveReceipt(newReceiptId)
             setAllReceipts((p: Receipt[]) => p.find((r) => r.id === 'none') ? p.filter((r) => r.id !== 'none') : p)
         },
@@ -271,7 +271,7 @@ const useForm = () => {
                 setFinishErrors(errors);
             } else {
                 setFinishErrors([]);
-                setReceipt((p: Receipt) => ({...p, isFinished: true, date: new Date().toLocaleDateString(), hour: new Date().toLocaleTimeString()}))
+                setReceipt((p: Receipt) => ({...p, isFinished: true}))
                 printAndUpload();
             }
 

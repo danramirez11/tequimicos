@@ -110,6 +110,7 @@ const ReceiptHis = ({receipt, onPrint}: ReceiptHisProps) => {
                     <p className="receipt-his-products">
                         { productNames }
                     </p>
+                    <p>{receipt.date} {receipt.hour}</p>
                     <p>{easilyReadDate}</p>
                     <p>{receipt.isDelivery ? 'Domicilio' : 'Punto de venta'}</p>
                     <p><b>${receipt.total}</b></p>
