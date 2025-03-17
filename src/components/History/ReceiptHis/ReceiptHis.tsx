@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Receipt } from "../../../types/products";
 import './ReceiptHis.css'
 import { formatDate } from "../../../utils/functions";
 import { FaPrint } from "react-icons/fa6"; 
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { FormContext } from "../../../context/formContext";
+import { useNavigate } from "react-router";
 
 type ReceiptHisProps = {
     receipt: Receipt;
@@ -12,9 +14,11 @@ type ReceiptHisProps = {
 
 const ReceiptHis = ({receipt, onPrint}: ReceiptHisProps) => {
     const [ isActive, setIsActive ] = useState<boolean>(false);
-
+    const formContext = useContext(FormContext);
+    const { receiptFun } = formContext!;
     const easilyReadDate = formatDate(receipt.date, receipt.timestamp);
     const productNames = receipt.products.map(p => p.name).join(', ');
+    const navigate = useNavigate();
 
     return (
         <section className={`receipt-his ${isActive ? 'his-active' : ''}`} onClick={() => setIsActive(!isActive)}>
@@ -99,7 +103,11 @@ const ReceiptHis = ({receipt, onPrint}: ReceiptHisProps) => {
                         e.stopPropagation();
                         onPrint(receipt);
                     }}><FaPrint/></button>
-                    <button className="blue" disabled><FaEdit/></button>
+                    <button className="blue" onClick={(e) => {
+                        e.stopPropagation();
+                        receiptFun.updateReceipt(receipt);
+                        navigate('/facturacion')
+                    }}><FaEdit/></button>
                     <button className="red" disabled><FaTrash/></button>
                 </div>
                 </div> 

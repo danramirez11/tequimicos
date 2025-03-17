@@ -132,6 +132,13 @@ const useForm = () => {
 
         changeActiveReceipt: (id: string) => {
             setActiveReceipt(id)
+        },
+
+        updateReceipt: (receipt: Receipt) => {
+            setAllReceipts((p: Receipt[]) => [...p, receipt])
+            setTimeout(() => {
+                setActiveReceipt(receipt.id) 
+            }, 1000);
         }
     }
 
