@@ -74,6 +74,7 @@ const LidForm = ({lid}: LidFormProps) => {
                     <div key={c.name} className="flex indentation">
                         <select name="name" id="" className="simple" value={c.name} onChange={(e) => lidFun.changeLidColor(lid.id, c.name, 'name', e.target.value)}>
                             <option value="none">Seleccionar color</option>
+                            <option value="mixed">surtidas</option>
                             {
                                 lids.find(l => l.id === lid.productId) && Object.keys(lids.find(l => l.id === lid.productId)!.colors || {}).map((color) =>
                                     <option key={color} value={color}>{color}</option>)

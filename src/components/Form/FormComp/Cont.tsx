@@ -96,6 +96,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                                     <div key={color.name} className="flex">
                                         <select onChange={(e) => containerFun.changeLidColor(container.id, l.id, color.name, 'name', e.target.value)} name="color" className="simple" value={color.name}>
                                             <option value="none">Seleccionar color</option>
+                                            <option value="mixed">surtidas</option>
                                             { 
                                                 lids.find(lid => lid.id === l.productId) && Object.keys(lids.find(lid => lid.id === l.productId)?.colors || {}).map((c) => (
                                                     <option key={c} value={c}>{c}</option>
