@@ -49,7 +49,7 @@ const ContOnlyForm = ({container}: ContOnlyFormProps) => {
                         <option key={c.id} value={c.id}>{c.name}</option>
                     )}
                 </select>
-                <input type="number" min={0} placeholder="Cantidad" onChange={(e) => containerOnlyFun.changeQuantity(container.id, e.target.value)} value={container.quantity}/>
+                <input type="number" min={0} placeholder="Cantidad" className="quantity" onChange={(e) => containerOnlyFun.changeQuantity(container.id, e.target.value)} value={container.quantity}/>
                 <select name="priceBy" value={container.priceBy} onChange={(e) => containerOnlyFun.changePriceBy(container.id, e.target.value)} className="small">
                     <option value="unit">Unidad</option>
                     <option value="dozen">Docena</option>

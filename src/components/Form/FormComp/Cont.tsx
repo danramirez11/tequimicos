@@ -53,7 +53,7 @@ const ContainerForm = ({container}: ContainerProps) => {
                 )}
             </select>
 
-            <input type="number" min={0} placeholder="Cantidad" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)} value={container.quantity}/>
+            <input type="number" min={0} placeholder="Cantidad" className="quantity" onChange={(e) => containerFun.changeContainerQuantity(container.id, e.target.value)} value={container.quantity}/>
 
 
 

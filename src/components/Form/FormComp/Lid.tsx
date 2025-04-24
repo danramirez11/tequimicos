@@ -58,7 +58,7 @@ const LidForm = ({lid}: LidFormProps) => {
                         <option value="lab">Laboratorio</option>
                     </select>
                 }
-                <input type="number" min={0} placeholder="Cantidad" onChange={(e) => lidFun.changeLidQuantity(lid.id, e.target.value)} value={lid.quantity}/>
+                <input type="number" min={0} placeholder="Cantidad" className="quantity" onChange={(e) => lidFun.changeLidQuantity(lid.id, e.target.value)} value={lid.quantity}/>
                 <select name="priceBy" onChange={(e) => lidFun.changePriceBy(lid.id, e.target.value)} value={lid.priceBy} id="" className="small">
                     <option value="unit">Unidad</option>
                     <option value="dozen">Docena</option>

@@ -96,3 +96,7 @@ div.filter-option-inner-inner{
         width: 20%;
     }
 }
+
+input.quantity{
+    width: 30%;
+}
