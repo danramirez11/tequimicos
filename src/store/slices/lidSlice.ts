@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs } from "firebase/firestore";
 import { Lid } from "../../types/firebase";
-import { db } from "../../services/firebaseConfig";
+import { supabase } from "../../services/firebaseConfig";
 
 export interface lidState {
     lids: Lid[];
@@ -19,12 +18,15 @@ export const fetchLidData =createAsyncThunk(
     'firebase/fetcLidData',
     async (_, {rejectWithValue}) => {
         try {
-            const querySnapshot = await getDocs(collection(db, 'lids'))
-            const data: Lid[] = []
-            querySnapshot.forEach((doc) => {
-                data.push({id: doc.id, ...(doc.data() as Omit<Lid, 'id'>) })
-            })
-            return data;
+      const { data, error } = await supabase
+        .from('lids')
+        .select('*');
+
+      if (error) {
+        return rejectWithValue(error);
+      }
+
+      return (data ?? []) as Lid[];
         } catch (error) {
             return rejectWithValue(error)
         }

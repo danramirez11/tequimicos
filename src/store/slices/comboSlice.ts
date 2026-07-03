@@ -1,7 +1,47 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs } from "firebase/firestore";
-import { Combination } from "../../types/firebase";
-import { db } from "../../services/firebaseConfig";
+import { Combination, Container, Lid } from "../../types/firebase";
+import { supabase } from "../../services/firebaseConfig";
+
+type SupabaseCombinationRow = {
+    id: string;
+    lidId: string;
+    contId: string;
+    prices: Combination["prices"];
+}
+
+const mapSupabaseDataToCombinations = (
+    containers: Container[],
+    lids: Lid[],
+    combinations: SupabaseCombinationRow[]
+): Combination[] => {
+    const lidById = new Map(lids.map((lid) => [lid.id, lid]));
+
+    const lidsByContainerId = new Map<string, Combination["lids"]>();
+
+    combinations.forEach((combo) => {
+        const lid = lidById.get(combo.lidId);
+
+        if (!lid) {
+            return;
+        }
+
+        const currentLids = lidsByContainerId.get(combo.contId) ?? [];
+        currentLids.push({
+            id: lid.id,
+            name: lid.name,
+            prices: combo.prices,
+        });
+        lidsByContainerId.set(combo.contId, currentLids);
+    });
+
+    return containers.map((container) => ({
+        id: container.id,
+        name: container.name,
+        pack: container.pack,
+        prices: container.prices,
+        lids: lidsByContainerId.get(container.id) ?? [],
+    }));
+}
 
 export interface comboState {
     combinations: Combination[];
@@ -19,12 +59,29 @@ export const fetchComboData =createAsyncThunk(
     'firebase/fecthComboData',
     async (_, {rejectWithValue}) => {
         try {
-            const querySnapshot = await getDocs(collection(db, 'combinations'))
-            const data: Combination[] = []
-            querySnapshot.forEach((doc) => {
-                data.push({id: doc.id, ...(doc.data() as Omit<Combination, 'id'>) })
-            })
-            return data;
+            const [containersResult, lidsResult, combinationsResult] = await Promise.all([
+                supabase.from('containers').select('*'),
+                supabase.from('lids').select('*'),
+                supabase.from('combinations').select('*'),
+            ]);
+
+            if (containersResult.error) {
+                return rejectWithValue(containersResult.error);
+            }
+
+            if (lidsResult.error) {
+                return rejectWithValue(lidsResult.error);
+            }
+
+            if (combinationsResult.error) {
+                return rejectWithValue(combinationsResult.error);
+            }
+
+            return mapSupabaseDataToCombinations(
+                (containersResult.data ?? []) as Container[],
+                (lidsResult.data ?? []) as Lid[],
+                (combinationsResult.data ?? []) as SupabaseCombinationRow[]
+            );
         } catch (error) {
             return rejectWithValue(error)
         }

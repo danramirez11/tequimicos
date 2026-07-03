@@ -34,7 +34,7 @@ export type Container = {
     };
     quantity: number;
     type: 'container';
-    canBeSellAlone?: boolean;
+    can_be_sell_alone?: boolean;
 }
 
 export type Lid = {
@@ -49,7 +49,7 @@ export type Lid = {
     };
     colors: unknown;
     type: 'lid';
-    canBeSellAlone?: boolean;
+    can_be_sell_alone?: boolean;
 }
 
 export type Client = {
